@@ -1,7 +1,7 @@
 //valores default
 window.media = "valido"
 window.todos = "valido"
-window.turno = null
+window.turno = "valido"
 window.grafico_media = null
 window.grafico_todos = null
 window.grafico_turno = null
@@ -15,6 +15,7 @@ margin = 100
 function desenha_pesquisas() {
     intencao_voto();
     media_edados();
+    segundo_turno();
 }
 
 function intencao_voto() {
@@ -121,6 +122,62 @@ function bolinhas_preto() {
     })
 }*/
 
+function segundo_turno() {
+    var svg = dimple.newSvg("#turno", width, 500);
+      d3.csv("dados/segundo_turno.csv", function (data) {
+        window.data_turno = data
+        //filtra votos totais ou validos
+        recorte = window.turno   
+        var myChart = new dimple.chart(svg, data);
+        myChart = arruma_tooltip(myChart,"todos")        
+
+        data = dimple.filterData(data,"voto",recorte)
+        ibope_datafolha = dimple.filterData(data,"instituto",["Ibope","Datafolha"])
+        
+        myChart.setBounds(60, 30, width-margin, 405);
+        var x = myChart.addTimeAxis("x", "data","%Y-%m-%dT%H","%d/%m");
+        x.title = ""
+
+        y = myChart.addMeasureAxis("y", "valor");
+        y.overrideMax = 60.0
+        
+        //primeira série, linha com datafolha e ibope apenas
+        series = myChart.addSeries("candidato", dimple.plot.line);
+        series.data = ibope_datafolha
+        series.lineWeight = 1.8;
+        series.interpolation = "cardinal";
+                
+        //segunda série, só as bolhas. são duas séries apenas para eu pegar o valor do instituto na tooltip
+        series2 = myChart.addSeries(["candidato","instituto"], dimple.plot.bubble)
+        series2.data = data
+
+        myChart.assignColor("Dilma Rousseff","#CC0000");
+        myChart.assignColor("Marina Silva","#E69138");
+
+        //arruma ordem da legenda
+        legenda = myChart.addLegend(70, 8, width, 20, "left");
+        legenda._getEntries = function () {
+           return arruma_legenda(myChart,"turno")
+        }
+        
+        myChart.draw();
+
+        //translada labels do eixo x
+        x.shapes.selectAll("text").attr("transform",
+            function (d) {
+              return d3.select(this).attr("transform") + " translate(0, 15) rotate(-60)";
+            });
+
+        //muda tamanho do texto
+        jQuery("#turno").find("text").css({"font-size":"12px"})
+
+        window.grafico_turno = myChart
+        
+        myChart = arruma_tooltip(myChart,"todos")
+                
+     });
+}
+
 function muda_todos(recorte) {
     myChart = window.grafico_todos
     data = window.data_todos
@@ -146,6 +203,34 @@ function muda_todos(recorte) {
     window.grafico_todos = myChart
 
 }
+
+function muda_turno(recorte) {
+    myChart = window.grafico_turno
+    data = window.data_turno
+    data = dimple.filterData(data,"voto",recorte)
+    ibope_datafolha = dimple.filterData(data,"instituto",["Ibope","Datafolha"])
+    
+    legenda = myChart.legends
+    legenda_getEntries = function () {
+       return arruma_legenda(myChart,"turno")
+    }
+    
+    myChart.series[0].data = ibope_datafolha
+    myChart.series[1].data = data
+    
+    myChart = arruma_tooltip(myChart,"todos")
+    
+    myChart.draw(500)
+    //muda tamanho do texto
+    jQuery("#turno").find("text").css({"font-size":"12px"})
+
+//    setTimeout(function () { bolinhas_preto();    }, 500);
+
+    window.grafico_turno = myChart
+
+}
+
+
 
 function muda_media(recorte) {
     myChart = window.grafico_media
@@ -262,7 +347,9 @@ function arruma_tooltip(chart,qual_dos_dois) {
 function arruma_legenda(grafico, recorte) {
     if (recorte == "total")
         orderedValues = ["Dilma Rousseff", "Aécio Neves", "Marina Silva", "Eduardo Campos","Outros"];
-    else
+    else if (recorte == "turno")
+        orderedValues = ["Dilma Rousseff", "Marina Silva"];
+    else 
         orderedValues = ["Dilma Rousseff", "Aécio Neves", "Marina Silva", "Outros"];
 
     var entries = [];
@@ -296,3 +383,11 @@ function mudaVotoTodos(el) {
     jQuery('input[name="seletor-todos"][value!="' + window.todos + '"]').prop('checked', false);
     muda_todos(window.todos)
 }
+
+function mudaVotoTurno(el) {
+    window.turno = el.value;
+    jQuery(el).prop('checked',true);
+    jQuery('input[name="seletor-turno"][value!="' + window.turno + '"]').prop('checked', false);
+    muda_turno(window.turno)
+}
+

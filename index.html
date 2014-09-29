@@ -85,6 +85,30 @@
             #media_edados .dimple-marker.dimple-outros {
                 fill:#2E2B2D;
             }
+            #turno .dimple-bubble.dimple-ibope, #turno .dimple-bubble.dimple-datafolha {
+                opacity:1 !important;
+                stroke-width:6px !important;
+            }
+            #turno .dimple-marker {
+                stroke-width:0px !important;
+                opacity:1 !important;
+            }
+            #turno .dimple-bubble.dimple-dilma-rousseff.dimple-ibope, #turno .dimple-bubble.dimple-dilma-rousseff.dimple-datafolha {
+                fill:#CC0000;
+                stroke:#CC0000;
+            }
+            #turno .dimple-bubble.dimple-dilma-rousseff {
+                fill:#FFF;
+                stroke:#CC0000;
+            }
+            #turno .dimple-bubble.dimple-marina-silva.dimple-ibope, #turno .dimple-bubble.dimple-marina-silva.dimple-datafolha {
+                fill:#E69138;
+                stroke:#E69138;
+            }
+            #turno .dimple-bubble.dimple-marina-silva {
+                fill:#FFF;
+                stroke:#E69138;                
+            }
             
         </style>
     </head>
@@ -105,11 +129,19 @@
     <br>
     <br>
     
-    <div id="todos_institutos">
+    <div id="todos_institutos">    </div>
+
+        
+        <span style="font-size:25px; padding-left:58px">Todas as pesquisas - 2º Turno</span>
+        <br>
+        <span class="seletor-turno" style="padding-left:58px"> <input type="radio" name="seletor-turno" value="valido" checked onChange="mudaVotoTurno(this)"> Votos válidos  |  <input type="radio" name="seletor-turno" value="total" onChange="mudaVotoTurno(this)"> Votos totais</span>
+        <br>
+        <br>
+        <div id="turno"></div>
+        
         <script>
         desenha_pesquisas();
         </script>
-    </div>
     <div class="texto">
 A média das pesquisas já é uma tradição nos EUA, e ficou ainda mais famosa nas eleições norte-americanas de 2012, após Nate Silver, então no NYTimes, acertar tudo com a sua. No Brasil, fizemos a primeira média das pesquisas presidenciais em 2010, e ela se mostrou um bom instrumento para mostrar as tendências escondidas sob as oscilações e diferenças entre os institutos.
         <br>
