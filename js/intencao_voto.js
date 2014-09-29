@@ -29,7 +29,6 @@ function intencao_voto() {
 
         data = dimple.filterData(data,"voto",recorte)
         ibope_datafolha = dimple.filterData(data,"instituto",["Ibope","Datafolha"])
-        outros =  dimple.filterData(data,"instituto",["Vox Populi","MDA","Sensus"])
         
         myChart.setBounds(60, 30, width-margin, 405);
         var x = myChart.addTimeAxis("x", "data","%Y-%m-%d","%d/%m");
@@ -40,13 +39,12 @@ function intencao_voto() {
         //primeira série, linha com datafolha e ibope apenas
         series = myChart.addSeries("candidato", dimple.plot.line);
         series.data = ibope_datafolha
-        series.lineMarkers = true;
         series.lineWeight = 1.8;
         series.interpolation = "cardinal";
                 
-        //segunda série, bolhas com outros institutos
-        series2 = myChart.addSeries("candidato", dimple.plot.bubble)
-        series2.data = outros        
+        //segunda série, só as bolhas
+        series2 = myChart.addSeries(["candidato","instituto"], dimple.plot.bubble)
+        series2.data = data
 
         myChart.assignColor("Aécio Neves","#1C4587");
         myChart.assignColor("Dilma Rousseff","#CC0000");
@@ -60,7 +58,7 @@ function intencao_voto() {
         legenda._getEntries = function () {
            return arruma_legenda(myChart,recorte)
         }
-
+        
         myChart.draw();
 
         //translada labels do eixo x
@@ -73,6 +71,8 @@ function intencao_voto() {
         jQuery("#todos_institutos").find("text").css({"font-size":"12px"})
 
         window.grafico_todos = myChart
+        
+        myChart = arruma_tooltip(myChart,"todos")
         
         //arruma campos na legenda
         $("text[class*='dimple-eduardo-campos']").text("Ed. Campos")
@@ -125,7 +125,6 @@ function muda_todos(recorte) {
     data = window.data_todos
     data = dimple.filterData(data,"voto",recorte)
     ibope_datafolha = dimple.filterData(data,"instituto",["Ibope","Datafolha"])
-    outros =  dimple.filterData(data,"instituto",["Vox Populi","MDA","Sensus"])
     
     legenda = myChart.legends
     legenda_getEntries = function () {
@@ -133,7 +132,7 @@ function muda_todos(recorte) {
     }
     
     myChart.series[0].data = ibope_datafolha
-    myChart.series[1].data = outros
+    myChart.series[1].data = data
     
     myChart = arruma_tooltip(myChart,"todos")
     
@@ -187,6 +186,7 @@ function media_edados() {
         myChart.addMeasureAxis("y", "valor");
 
         series = myChart.addSeries("candidato", dimple.plot.line);
+        series.lineMarkers = true
         series.lineWeight = 2;
 
         myChart.assignColor("Aécio Neves","#1C4587");
@@ -228,21 +228,18 @@ function media_edados() {
 function arruma_tooltip(chart,qual_dos_dois) {
     for (s in chart.series) {
         chart.series[s].getTooltipText = function (e) {
-
             //pega a data e transforma em string no formato em que os dados estão
             var data = e.xField[0]
             var month = (1 + data.getMonth()).toString();
             month = month.length > 1 ? month : '0' + month;
             var day = data.getDate().toString();
             day = day.length > 1 ? day : '0' + day;
-            data_string = "2014-" + month + "-" + day
-
-            //se for o gráfico com mais de um instituto
+        
+            //se for o gráfico de todos
             if (qual_dos_dois == "todos") {
-
-                //pega o nome do instituto a partir dos dados originais do gráfico
-                var instituto = chart.data.filter(function (a) { return a["data"] == data_string})[0]["instituto"]
-
+                //acha o instituto se ele houver, usando a série do Dimple  
+               var instituto = e.key.split("/")[1].split("_")[0]
+                
                 return [
                 e.aggField[0]+": "+e.cy,
                 "Data: "+day+"/"+month,
