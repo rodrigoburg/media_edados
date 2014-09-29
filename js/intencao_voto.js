@@ -31,18 +31,19 @@ function intencao_voto() {
         ibope_datafolha = dimple.filterData(data,"instituto",["Ibope","Datafolha"])
         
         myChart.setBounds(60, 30, width-margin, 405);
-        var x = myChart.addTimeAxis("x", "data","%Y-%m-%d","%d/%m");
+        var x = myChart.addTimeAxis("x", "data","%Y-%m-%dT%H","%d/%m");
         x.title = ""
 
-        myChart.addMeasureAxis("y", "valor");
-
+        y = myChart.addMeasureAxis("y", "valor");
+        y.overrideMax = 50.0
+        
         //primeira série, linha com datafolha e ibope apenas
         series = myChart.addSeries("candidato", dimple.plot.line);
         series.data = ibope_datafolha
         series.lineWeight = 1.8;
         series.interpolation = "cardinal";
                 
-        //segunda série, só as bolhas
+        //segunda série, só as bolhas. são duas séries apenas para eu pegar o valor do instituto na tooltip
         series2 = myChart.addSeries(["candidato","instituto"], dimple.plot.bubble)
         series2.data = data
 
@@ -177,16 +178,17 @@ function media_edados() {
         //filtra votos totais ou validos
         recorte = window.media
         
+        
         data = dimple.filterData(data,"voto",recorte)
         var myChart = new dimple.chart(svg, data);        
         myChart.setBounds(60, 30, width-margin, 405);
-        var x = myChart.addTimeAxis("x", "data","%Y-%m-%d","%d/%m");
+        var x = myChart.addTimeAxis("x", "data","%Y-%m-%dT%H","%d/%m");
         x.title = ""
 
-        myChart.addMeasureAxis("y", "valor");
+        y = myChart.addMeasureAxis("y", "valor");
+        y.overrideMax = 50.0
 
         series = myChart.addSeries("candidato", dimple.plot.line);
-        series.lineMarkers = true
         series.lineWeight = 2;
 
         myChart.assignColor("Aécio Neves","#1C4587");
