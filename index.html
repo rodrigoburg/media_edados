@@ -1,0 +1,90 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01//EN" "http://www.w3.org/TR/html4/strict.dtd">
+<html>
+	<head>
+		<meta http-equiv="content-type" content="text/html; charset=utf-8" />
+
+        <script src="js/jquery-2.0.3.min.js"></script>
+        <script src="js/d3.v3.min.js"></script>
+        <script src="js/dimple.v2.0.0.min.js"></script>
+        <script src="js/intencao_voto.js"></script>
+        <style>
+            body {
+            font-family: 'pt sans';
+            font-size: 13px;
+            }
+            .texto {
+                
+            padding-left: 58px;
+            font-family: 'pt sans';
+            font-size: 13px;
+            font-style: normal;
+            font-variant: normal;
+            font-weight: normal;
+            height: 38px;
+            line-height: 19.5px;
+            margin-bottom: 10px;
+            margin-left: 0px;
+            margin-right: 0px;
+            margin-top: 0px;
+            padding-bottom: 0px;
+            padding-right: 0px;
+            padding-top: 0px;
+            vertical-align: baseline;
+            width: 1250.1875px;
+            }
+            
+            #todos_institutos .dimple-bubble {
+                fill:#FFF;
+            }
+            #todos_institutos .dimple-marker {
+                stroke-width:6px !important;
+                opacity:1 !important;
+            }
+            #todos_institutos .dimple-marker.dimple-dilma-rousseff {
+                fill:#CC0000;
+                stroke:#CC0000;
+            }
+            #todos_institutos .dimple-marker.dimple-a-cio-neves {
+                fill:#1C4587;
+                stroke:#1C4587;
+            }
+            #todos_institutos .dimple-marker.dimple-marina-silva, #todos_institutos .dimple-marker.dimple-eduardo-campos {
+                fill:#E69138;
+                stroke:#E69138;
+            }
+            #todos_institutos .dimple-marker.dimple-outros {
+                fill:#2E2B2D;
+                stroke:#2E2B2D;
+            }
+        </style>
+    </head>
+<body>
+
+    <span style="font-size:25px; padding-left:58px">Média Estadão Dados de intenção de voto</span>
+    <br>
+    <span class="seletor-media" style="padding-left:58px"> <input type="radio" name="seletor-media" value="valido" checked onChange="mudaVotoMedia(this)"> Votos válidos  |  <input type="radio" name="seletor-media" value="total" onChange="mudaVotoMedia(this)"> Votos totais</span>
+    <div id="media_edados"></div>
+
+    <br />
+
+    <span style="font-size:25px; padding-left:58px">Todas as pesquisas na mesma linha do tempo</span>
+    <br>
+    <span class="seletor-todos" style="padding-left:58px"> <input type="radio" name="seletor-todos" value="valido" checked onChange="mudaVotoTodos(this)"> Votos válidos  |  <input type="radio" name="seletor-todos" value="total" onChange="mudaVotoTodos(this)"> Votos totais</span>
+    <div id="todos_institutos">
+        <script>
+        desenha_pesquisas();
+        </script>
+    </div>
+    <div class="texto">
+A média das pesquisas já é uma tradição nos EUA, e ficou ainda mais famosa nas eleições norte-americanas de 2012, após Nate Silver, então no NYTimes, acertar tudo com a sua. No Brasil, fizemos a primeira média das pesquisas presidenciais em 2010, e ela se mostrou um bom instrumento para mostrar as tendências escondidas sob as oscilações e diferenças entre os institutos.
+        <br>
+        <br>
+A média mostrada acima é diferente da de 2010. Inclui todas as pesquisas conhecidas, mas é ponderada. Dá peso maior aos levantamentos de institutos que pesquisam com mais frequência e constância metodológica, que se expuseram ao teste das urnas fazendo pesquisas na véspera de eleições e que acertaram mais, na comparação com o resultado.
+        <br>
+        <br>
+No gráfico com todas as pesquisas na mesma linha do tempo, os pontos preenchidos correspondem a pesquisas dos institutos Datafolha e Ibope. Passe o mouse em cima de cada ponto para saber qual é o instituto responsável por cada pesquisa.
+        <br>
+        <br>
+Fonte: Ibope, Datafolha, Sensus, MDA e Vox Populi</div>
+    
+</body>
