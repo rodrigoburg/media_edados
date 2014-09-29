@@ -12,6 +12,11 @@ window.data_turno = null
 width = $(window).width()*0.9
 margin = 100
 
+//div para linha de 50%
+var div_turno = d3.select("body").append("div")
+    .attr("class", "tooltip")
+    .style("opacity", 0);
+
 function desenha_pesquisas() {
     intencao_voto();
     media_edados();
@@ -54,6 +59,16 @@ function intencao_voto() {
         myChart.assignColor("Marina Silva","#E69138");
         myChart.assignColor("Outros","#2E2B2D");
 
+        //faz uma série nova que será a linha cinza de 50%
+        datas = dimple.getUniqueValues(data,"data")
+        var s3 = myChart.addSeries("metade", dimple.plot.line);
+        
+        primeira_data = datas[0]
+        ultima_data = datas[datas.length-1]
+
+        s3.data = [
+            { "metade" : "metade", "valor" : 50, "data" : primeira_data }, 
+            { "metade" : "metade", "valor" : 50, "data" :  ultima_data}];
 
         //arruma ordem da legenda
         legenda = myChart.addLegend(70, 8, width, 20, "left");
@@ -151,6 +166,18 @@ function segundo_turno() {
         series2 = myChart.addSeries(["candidato","instituto"], dimple.plot.bubble)
         series2.data = data
 
+        //faz uma série nova que será a linha cinza de 50%
+        datas = dimple.getUniqueValues(data,"data")
+        var s3 = myChart.addSeries("metade", dimple.plot.line);
+        
+        primeira_data = datas[0]
+        ultima_data = datas[datas.length-1]
+
+        s3.data = [
+            { "metade" : "metade", "valor" : 50, "data" : primeira_data }, 
+            { "metade" : "metade", "valor" : 50, "data" :  ultima_data}];
+        
+        
         myChart.assignColor("Dilma Rousseff","#CC0000");
         myChart.assignColor("Marina Silva","#E69138");
 
@@ -174,10 +201,39 @@ function segundo_turno() {
         window.grafico_turno = myChart
         
         myChart = arruma_tooltip(myChart,"todos")
-                
+        
+        //arruma a barra de 50%
+        arruma_50()
      });
 }
 
+function arruma_50() {
+    $("circle[id*='metade']").remove()
+    
+    $("path[id*='metade']")
+        .css({
+            "stroke": "#000000",
+            "stroke-dasharray":"5.5",
+            "stroke-width":"2",
+            "stroke-opacity":"0.5"
+        })
+        .attr("stroke","#000000")
+        .attr("opacity","#0.5")
+    
+    d3.select("path[id*='metade']")
+        .on("mouseover",function(d){
+            div_turno.transition()
+                .duration(0)
+                .style("opacity", 1)
+            div_turno.html("Metade dos votos válidos; acima disso, significa vitória")
+                .style("left", (d3.event.pageX - 10) + "px")
+                .style("top", (d3.event.pageY - 28) + "px")})
+        .on("mouseout", function(d) {
+            div_turno.transition()
+            .duration(1500)
+            .style("opacity", 0);
+        });
+}
 function muda_todos(recorte) {
     myChart = window.grafico_todos
     data = window.data_todos
@@ -276,6 +332,17 @@ function media_edados() {
         series = myChart.addSeries("candidato", dimple.plot.line);
         series.lineWeight = 2;
 
+        //faz uma série nova que será a linha cinza de 50%
+        datas = dimple.getUniqueValues(data,"data")
+        var s3 = myChart.addSeries("metade", dimple.plot.line);
+        
+        primeira_data = datas[0]
+        ultima_data = datas[datas.length-1]
+
+        s3.data = [
+            { "metade" : "metade", "valor" : 50, "data" : primeira_data }, 
+            { "metade" : "metade", "valor" : 50, "data" :  ultima_data}];
+
         myChart.assignColor("Aécio Neves","#1C4587");
         myChart.assignColor("Dilma Rousseff","#CC0000");
         myChart.assignColor("Eduardo Campos","#E69138");
@@ -307,6 +374,8 @@ function media_edados() {
 
         window.grafico_media = myChart
 
+        //arruma a barra de 50%
+        arruma_50()
       });
 
 
@@ -390,4 +459,5 @@ function mudaVotoTurno(el) {
     jQuery('input[name="seletor-turno"][value!="' + window.turno + '"]').prop('checked', false);
     muda_turno(window.turno)
 }
+
 
