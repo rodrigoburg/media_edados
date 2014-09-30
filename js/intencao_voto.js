@@ -132,7 +132,7 @@ function intencao_voto() {
             { "metade" : "metade", "valor" : 50, "data" :  ultima_data}];
 
         //arruma ordem da legenda
-        var legenda = myChart.addLegend(70, 8, width, 30, "left");
+        var legenda = myChart.addLegend(25, 8, width, 30, "left");
         legenda._getEntries = function () {
            return arruma_legenda(myChart,recorte)
         }
@@ -202,7 +202,7 @@ function media_edados() {
         myChart = arruma_tooltip(myChart,"media")
 
         //arruma ordem da legenda
-        var legenda = myChart.addLegend(70, 8, width, 30, "left");
+        var legenda = myChart.addLegend(25, 8, width, 30, "left");
         legenda._getEntries = function () {
            return arruma_legenda(myChart,recorte)
         }
@@ -277,7 +277,7 @@ function segundo_turno() {
         myChart.assignColor("Marina Silva","#E69138");
 
         //arruma ordem da legenda
-        var legenda = myChart.addLegend(70, 8, width, 20, "left");
+        var legenda = myChart.addLegend(25, 8, width, 20, "left");
         legenda._getEntries = function () {
            return arruma_legenda(myChart,"turno")
         }
