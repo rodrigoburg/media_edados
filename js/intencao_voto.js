@@ -1,6 +1,6 @@
 //onde está os dados
 path = "http://blog.estadaodados.com/projs/media_edados/"
-
+path = ""
 //cria as tabs e deixa ativa a que for informada na url
 jQuery(function() {
   jQuery( "#tabs" ).tabs();
@@ -11,7 +11,7 @@ jQuery(function() {
   if ("grafico" in variaveis) {
       tab = variaveis["grafico"];
   } else { //coloca default media na url
-      location.search = "?grafico=media"
+      location.hash = "#grafico=media"
   }
   
   var numero = 0
@@ -43,17 +43,17 @@ jQuery(function() {
         if (grafico == "1") {
             muda_media("valido")
 //            jQuery("#media_edados").fadeIn("normal")            
-            location.search = "?grafico=media";
+            location.hash = "#grafico=media";
         }
         else if (grafico == "2") {
             muda_todos("valido")
 //            jQuery("#todos_institutos").fadeIn("normal")            
-            location.search = "?grafico=1turno";
+            location.hash = "#grafico=1turno";
         }            
         else if (grafico == "3") {
             muda_turno("valido")
  //           jQuery("#turno").fadeIn("normal")            
-            location.search = "?grafico=2marina";
+            location.hash = "#grafico=2marina";
         }
     }
   });
@@ -538,7 +538,7 @@ function mudaVotoTurno(el) {
 
 function getUrlVars() {
     var vars = {};
-    var parts = window.location.href.replace(/[?&]+([^=&]+)=([^&]*)/gi, function(m,key,value) {
+    var parts = window.location.href.replace(/[#&]+([^=&]+)=([^&]*)/gi, function(m,key,value) {
         vars[key] = decodeURIComponent(value);
     });
     return vars;
