@@ -68,7 +68,7 @@ window.data_todos = null
 window.data_turno = null
 
 width = jQuery(window).width()
-margin = width/6
+margin = width/5
 
 //div para linha de 50%
 var div_turno = d3.select("body").append("div")
@@ -501,21 +501,28 @@ function arruma_tooltip(chart,qual_dos_dois) {
 }
 
 function arruma_legenda(grafico, recorte) {
+    cores = {
+        "Aécio":"#1C4587",
+        "Dilma":"#CC0000",
+        "Eduardo":"#E69138",
+        "Marina":"#E69138"
+    }
+    
     var orderedValues = []
     if (recorte == "total")
-        orderedValues = ["Dilma Rousseff", "Aécio Neves", "Marina Silva", "Eduardo Campos"];
+        orderedValues = ["Dilma", "Aécio", "Marina", "Eduardo"];
     else if (recorte == "turno")
-        orderedValues = ["Dilma Rousseff", "Marina Silva"];
+        orderedValues = ["Dilma", "Marina"];
     else 
-        orderedValues = ["Dilma Rousseff", "Aécio Neves", "Marina Silva"];
+        orderedValues = ["Dilma", "Aécio", "Marina"];
 
     var entries = [];
     orderedValues.forEach(function (v) {
         entries.push(
         {
                 key: v,
-                fill: grafico.getColor(v).fill,
-                stroke: grafico.getColor(v).stroke,
+                fill: cores[v],
+                stroke: cores[v],
                 opacity: grafico.getColor(v).opacity,
                 series: grafico.series[0],
                 aggField: [v]
