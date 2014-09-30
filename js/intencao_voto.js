@@ -7,9 +7,7 @@ jQuery(function() {
     
   if ("grafico" in variaveis) {
       tab = variaveis["grafico"];
-  } else { //se não tiver, coloca a média no search da url
-      location.search = "?grafico=media"
-  }
+  } 
   
   var numero = 0
   
