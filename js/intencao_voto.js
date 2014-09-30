@@ -1,3 +1,62 @@
+//cria as tabs e deixa ativa a que for informada na url
+$(function() {
+  $( "#tabs" ).tabs();
+
+  var variaveis = getUrlVars()
+      tab = "media" //valor default
+    
+  if ("grafico" in variaveis) {
+      tab = variaveis["grafico"];
+  } else { //se não tiver, coloca a média no search da url
+      location.search = "?grafico=media"
+  }
+  
+  var numero = 0
+  
+  if (tab == "media") 
+      numero = 0
+  else if (tab == "1turno") 
+      numero = 1
+  else if (tab == "2marina") 
+      numero = 2
+
+
+  //deixa ativa a tab correta
+  $( "#tabs" ).tabs( "option", "active", numero );
+
+  //coloca função para redesenhar gráfico quando mudar Tab e mudar endereço da barra
+  $( "#tabs" ).tabs({
+    beforeActivate: function( event, ui ) {
+        $("#media_edados").hide()
+        $("#todos_institutos").hide()
+        $("#turno").hide()
+        }
+  });
+  
+  $( "#tabs" ).tabs({
+    activate: function( event, ui ) {
+        var grafico = ui.newPanel.selector.split("-")[1]
+            mude_esse = null
+        if (grafico == "1") {
+            muda_media("valido")
+            $("#media_edados").fadeIn("normal")            
+            location.search = "?grafico=media";
+        }
+        else if (grafico == "2") {
+            muda_todos("valido")
+            $("#todos_institutos").fadeIn("normal")            
+            location.search = "?grafico=1turno";
+        }            
+        else if (grafico == "3") {
+            muda_turno("valido")
+            $("#turno").fadeIn("normal")            
+            location.search = "?grafico=2marina";
+        }
+    }
+  });
+  
+});
+
 //valores default
 window.media = "valido"
 window.todos = "valido"
@@ -9,13 +68,14 @@ window.data_media = null
 window.data_todos = null
 window.data_turno = null
 
-width = $(window).width()*0.9
-margin = 100
+width = $(window).width()*0.8
+margin = 200
 
 //div para linha de 50%
 var div_turno = d3.select("body").append("div")
     .attr("class", "tooltip")
     .style("opacity", 0);
+
 
 function desenha_pesquisas() {
     intencao_voto();
@@ -25,7 +85,7 @@ function desenha_pesquisas() {
 
 function intencao_voto() {
     var svg = dimple.newSvg("#todos_institutos", width, 500);
-      d3.csv("http://blog.estadaodados.com/projs/media_edados/dados/todos_institutos.csv", function (data) {
+      d3.csv("dados/todos_institutos.csv", function (data) {
         window.data_todos = data
         //filtra votos totais ou validos
         recorte = window.todos   
@@ -71,7 +131,7 @@ function intencao_voto() {
             { "metade" : "metade", "valor" : 50, "data" :  ultima_data}];
 
         //arruma ordem da legenda
-        legenda = myChart.addLegend(70, 8, width, 20, "left");
+        legenda = myChart.addLegend(70, 8, width, 30, "left");
         legenda._getEntries = function () {
            return arruma_legenda(myChart,recorte)
         }
@@ -97,49 +157,79 @@ function intencao_voto() {
         
      });
 }
-/*
-function bolinhas_preto() {
-    data = window.data_todos
-    //muda bolinhas pra preto
-    jQuery("#todos_institutos").find("circle").each(function (){
-        //aumenta o raio
-        $(this).attr("r","6")
-                .css({"stroke-width":"2px"})
+function media_edados() {
+    var svg = dimple.newSvg("#media_edados", width, 500);
+      d3.csv("dados/media_edados.csv", function (data) {
+        window.data_media = data
+        //filtra votos totais ou validos
+        recorte = window.media
         
-        //agora muda as cores
-        var date = new Date(this.id.split("_")[1])
-        var month = (1 + date.getMonth()).toString();
-        month = month.length > 1 ? month : '0' + month;
-        var day = date.getDate().toString();
-        day = day.length > 1 ? day : '0' + day;
-        data_string = "2014-" + month + "-" + day
+        
+        data = dimple.filterData(data,"voto",recorte)
+        var myChart = new dimple.chart(svg, data);        
+        myChart.setBounds(60, 30, width-margin, 405);
+        var x = myChart.addTimeAxis("x", "data","%Y-%m-%dT%H","%d/%m");
+        x.title = ""
 
-        var bola = data.filter(function (a) { return a["data"] == data_string})[0]
-        if (bola){
-            instituto = bola["instituto"]
-            var candidato = this.id.split("_")[0]
+        y = myChart.addMeasureAxis("y", "valor");
+        y.overrideMax = 50.0
 
-            if (["Ibope","Datafolha"].indexOf(instituto) > -1) {
-                if (candidato == "Dilma Rousseff") {
-                    jQuery(this).attr("fill","#CC0000")
-                } else if (candidato == "Aécio Neves") {
-                    jQuery(this).attr("fill","#1C4587")
-                } else if (candidato == "Eduardo Campos" || candidato == "Marina Silva") {
-                    jQuery(this).attr("fill","#E69138")
-                } else if (candidato == "Pastor Everaldo") {
-                    jQuery(this).attr("fill","#6AA84F")
-                } else {
-                    jQuery(this).attr("fill","#2E2B2D")
-                }
-            }
-            
+        series = myChart.addSeries("candidato", dimple.plot.line);
+        series.lineWeight = 2;
+
+        //faz uma série nova que será a linha cinza de 50%
+        datas = dimple.getUniqueValues(data,"data")
+        var s3 = myChart.addSeries("metade", dimple.plot.line);
+        
+        primeira_data = datas[0]
+        ultima_data = datas[datas.length-1]
+
+        s3.data = [
+            { "metade" : "metade", "valor" : 50, "data" : primeira_data }, 
+            { "metade" : "metade", "valor" : 50, "data" :  ultima_data}];
+
+        myChart.assignColor("Aécio Neves","#1C4587");
+        myChart.assignColor("Dilma Rousseff","#CC0000");
+        myChart.assignColor("Eduardo Campos","#E69138");
+        myChart.assignColor("Marina Silva","#E69138");
+        myChart.assignColor("Outros","#2E2B2D");
+
+        myChart = arruma_tooltip(myChart,"media")
+
+        //arruma ordem da legenda
+        legenda = myChart.addLegend(70, 8, width, 30, "left");
+        legenda._getEntries = function () {
+           return arruma_legenda(myChart,recorte)
         }
-    })
-}*/
+
+        myChart.draw();
+
+        //translada labels do eixo x
+        x.shapes.selectAll("text").attr("transform",
+            function (d) {
+              return d3.select(this).attr("transform") + " translate(0, 15) rotate(-60)";
+            });
+
+        //muda tamanho do texto
+        jQuery("#media_edados").find("text").css({"font-size":"12px"})
+
+        //arruma campos na legenda
+        $("text[class*='dimple-eduardo-campos']").text("Ed. Campos")
+        $("text[class*='dimple-pastor-everaldo']").text("P. Everaldo")
+
+        window.grafico_media = myChart
+
+        //arruma a barra de 50%
+        arruma_50()
+      });
+
+
+}
+
 
 function segundo_turno() {
     var svg = dimple.newSvg("#turno", width, 500);
-      d3.csv("http://blog.estadaodados.com/projs/media_edados/dados/segundo_turno.csv", function (data) {
+      d3.csv("dados/segundo_turno.csv", function (data) {
         window.data_turno = data
         //filtra votos totais ou validos
         recorte = window.turno   
@@ -206,6 +296,7 @@ function segundo_turno() {
         arruma_50()
      });
 }
+
 
 function arruma_50() {
     $("circle[id*='metade']").remove()
@@ -361,74 +452,7 @@ function muda_media(recorte) {
     arruma_50();
 }
 
-function media_edados() {
-    var svg = dimple.newSvg("#media_edados", width, 500);
-      d3.csv("http://blog.estadaodados.com/projs/media_edados/dados/media_edados.csv", function (data) {
-        window.data_media = data
-        //filtra votos totais ou validos
-        recorte = window.media
-        
-        
-        data = dimple.filterData(data,"voto",recorte)
-        var myChart = new dimple.chart(svg, data);        
-        myChart.setBounds(60, 30, width-margin, 405);
-        var x = myChart.addTimeAxis("x", "data","%Y-%m-%dT%H","%d/%m");
-        x.title = ""
 
-        y = myChart.addMeasureAxis("y", "valor");
-        y.overrideMax = 50.0
-
-        series = myChart.addSeries("candidato", dimple.plot.line);
-        series.lineWeight = 2;
-
-        //faz uma série nova que será a linha cinza de 50%
-        datas = dimple.getUniqueValues(data,"data")
-        var s3 = myChart.addSeries("metade", dimple.plot.line);
-        
-        primeira_data = datas[0]
-        ultima_data = datas[datas.length-1]
-
-        s3.data = [
-            { "metade" : "metade", "valor" : 50, "data" : primeira_data }, 
-            { "metade" : "metade", "valor" : 50, "data" :  ultima_data}];
-
-        myChart.assignColor("Aécio Neves","#1C4587");
-        myChart.assignColor("Dilma Rousseff","#CC0000");
-        myChart.assignColor("Eduardo Campos","#E69138");
-        myChart.assignColor("Marina Silva","#E69138");
-        myChart.assignColor("Outros","#2E2B2D");
-
-        myChart = arruma_tooltip(myChart,"media")
-
-        //arruma ordem da legenda
-        legenda = myChart.addLegend(70, 8, width, 30, "left");
-        legenda._getEntries = function () {
-           return arruma_legenda(myChart,recorte)
-        }
-
-        myChart.draw();
-
-        //translada labels do eixo x
-        x.shapes.selectAll("text").attr("transform",
-            function (d) {
-              return d3.select(this).attr("transform") + " translate(0, 15) rotate(-60)";
-            });
-
-        //muda tamanho do texto
-        jQuery("#media_edados").find("text").css({"font-size":"12px"})
-
-        //arruma campos na legenda
-        $("text[class*='dimple-eduardo-campos']").text("Ed. Campos")
-        $("text[class*='dimple-pastor-everaldo']").text("P. Everaldo")
-
-        window.grafico_media = myChart
-
-        //arruma a barra de 50%
-        arruma_50()
-      });
-
-
-}
 
 function arruma_tooltip(chart,qual_dos_dois) {
     for (s in chart.series) {
@@ -509,4 +533,10 @@ function mudaVotoTurno(el) {
     muda_turno(window.turno)
 }
 
-
+function getUrlVars() {
+    var vars = {};
+    var parts = window.location.href.replace(/[?&]+([^=&]+)=([^&]*)/gi, function(m,key,value) {
+        vars[key] = decodeURIComponent(value);
+    });
+    return vars;
+}

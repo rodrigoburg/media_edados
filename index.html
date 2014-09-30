@@ -3,10 +3,12 @@
 	<head>
 		<meta http-equiv="content-type" content="text/html; charset=utf-8" />
 
-        <script src="http://blog.estadaodados.com/projs/media_edados/js/jquery-2.0.3.min.js"></script>
-        <script src="http://blog.estadaodados.com/projs/media_edados/js/d3.v3.min.js"></script>
-        <script src="http://blog.estadaodados.com/projs/media_edados/js/dimple.v2.0.0.min.js"></script>
-        <script src="http://blog.estadaodados.com/projs/media_edados/js/intencao_voto.js"></script>
+        <script src="js/jquery-2.0.3.min.js"></script>
+        <script src="js/d3.v3.min.js"></script>
+        <script src="js/dimple.v2.0.0.min.js"></script>
+        <script src="js/intencao_voto.js"></script>
+        <script src="js/jquery-ui.js"></script>
+        <link rel="stylesheet" href="css/jquery-ui.css">
         <style>
             body {
             font-family: 'pt sans';
@@ -14,7 +16,7 @@
             }
             .texto {
                 
-            padding-left: 58px;
+            padding-left: 30px;
             font-family: 'pt sans';
             font-size: 13px;
             font-style: normal;
@@ -113,45 +115,47 @@
         </style>
     </head>
 <body>
-
+<div id="tabs">
+  <ul>
+    <li><a href="#tabs-1">Média Estadão Dados</a></li>
+    <li><a href="#tabs-2">Todas as pesquisas - 1º turno</a></li>
+    <li><a href="#tabs-3">Todas as pesquisas - 2º turno com Marina</a></li>
+  </ul>
+  <div id="tabs-1">
     <span style="font-size:25px; padding-left:58px">Média Estadão Dados de intenção de voto</span>
     <br>
     <span class="seletor-media" style="padding-left:58px"> <input type="radio" name="seletor-media" value="valido" checked onChange="mudaVotoMedia(this)"> Votos válidos  |  <input type="radio" name="seletor-media" value="total" onChange="mudaVotoMedia(this)"> Votos totais</span>
     <br>
     <br>
     <div id="media_edados"></div>
-
-    <br />
-
+    <p>A média das pesquisas já é uma tradição nos EUA, e ficou ainda mais famosa nas eleições norte-americanas de 2012, após Nate Silver, então no NYTimes, acertar tudo com a sua. No Brasil, fizemos a primeira média das pesquisas presidenciais em 2010, e ela se mostrou um bom instrumento para mostrar as tendências escondidas sob as oscilações e diferenças entre os institutos.</p>
+    <p>A média mostrada acima é diferente da de 2010. Inclui todas as pesquisas conhecidas, mas é ponderada. Dá peso maior aos levantamentos de institutos que pesquisam com mais frequência e constância metodológica, que se expuseram ao teste das urnas fazendo pesquisas na véspera de eleições e que acertaram mais, na comparação com o resultado.</p>
+  </div>
+  <div id="tabs-2">
     <span style="font-size:25px; padding-left:58px">Todas as pesquisas na mesma linha do tempo</span>
     <br>
     <span class="seletor-todos" style="padding-left:58px"> <input type="radio" name="seletor-todos" value="valido" checked onChange="mudaVotoTodos(this)"> Votos válidos  |  <input type="radio" name="seletor-todos" value="total" onChange="mudaVotoTodos(this)"> Votos totais</span>
     <br>
     <br>
-    
     <div id="todos_institutos">    </div>
-
-        
+    <p>Os pontos preenchidos correspondem a pesquisas dos institutos Datafolha e Ibope. Passe o mouse em cima de cada ponto para saber qual é o instituto responsável por cada pesquisa.</p>
+  </div>
+  <div id="tabs-3">
         <span style="font-size:25px; padding-left:58px">Todas as pesquisas - Simulação de 2º Turno</span>
         <br>
         <span class="seletor-turno" style="padding-left:58px"> <input type="radio" name="seletor-turno" value="valido" checked onChange="mudaVotoTurno(this)"> Votos válidos  |  <input type="radio" name="seletor-turno" value="total" onChange="mudaVotoTurno(this)"> Votos totais</span>
         <br>
         <br>
         <div id="turno"></div>
+    <p>Os pontos preenchidos correspondem a pesquisas dos institutos Datafolha e Ibope. Passe o mouse em cima de cada ponto para saber qual é o instituto responsável por cada pesquisa.</p>
+    </div>
+</div>
         
         <script>
         desenha_pesquisas();
         </script>
-    <div class="texto">
-A média das pesquisas já é uma tradição nos EUA, e ficou ainda mais famosa nas eleições norte-americanas de 2012, após Nate Silver, então no NYTimes, acertar tudo com a sua. No Brasil, fizemos a primeira média das pesquisas presidenciais em 2010, e ela se mostrou um bom instrumento para mostrar as tendências escondidas sob as oscilações e diferenças entre os institutos.
+    
         <br>
-        <br>
-A média mostrada acima é diferente da de 2010. Inclui todas as pesquisas conhecidas, mas é ponderada. Dá peso maior aos levantamentos de institutos que pesquisam com mais frequência e constância metodológica, que se expuseram ao teste das urnas fazendo pesquisas na véspera de eleições e que acertaram mais, na comparação com o resultado.
-        <br>
-        <br>
-No gráfico com todas as pesquisas na mesma linha do tempo, os pontos preenchidos correspondem a pesquisas dos institutos Datafolha e Ibope. Passe o mouse em cima de cada ponto para saber qual é o instituto responsável por cada pesquisa.
-        <br>
-        <br>
-Fonte: Ibope, Datafolha, Sensus, MDA e Vox Populi</div>
+        <div class="texto">Fonte: Ibope, Datafolha, Sensus, MDA e Vox Populi</div>
     
 </body>
