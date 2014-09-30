@@ -10,7 +10,9 @@ jQuery(function() {
     
   if ("grafico" in variaveis) {
       tab = variaveis["grafico"];
-  } 
+  } else { //coloca default media na url
+      location.search = "?grafico=media"
+  }
   
   var numero = 0
   
