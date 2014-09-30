@@ -503,11 +503,11 @@ function arruma_tooltip(chart,qual_dos_dois) {
 function arruma_legenda(grafico, recorte) {
     var orderedValues = []
     if (recorte == "total")
-        orderedValues = ["Dilma Rousseff", "Aécio Neves", "Marina Silva", "Eduardo Campos","Outros"];
+        orderedValues = ["Dilma Rousseff", "Aécio Neves", "Marina Silva", "Eduardo Campos"];
     else if (recorte == "turno")
         orderedValues = ["Dilma Rousseff", "Marina Silva"];
     else 
-        orderedValues = ["Dilma Rousseff", "Aécio Neves", "Marina Silva", "Outros"];
+        orderedValues = ["Dilma Rousseff", "Aécio Neves", "Marina Silva"];
 
     var entries = [];
     orderedValues.forEach(function (v) {
