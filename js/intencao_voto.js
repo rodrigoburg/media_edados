@@ -1,6 +1,6 @@
 //cria as tabs e deixa ativa a que for informada na url
-$(function() {
-  $( "#tabs" ).tabs();
+jQuery(function() {
+  jQuery( "#tabs" ).tabs();
 
   var variaveis = getUrlVars()
       tab = "media" //valor default
@@ -22,34 +22,34 @@ $(function() {
 
 
   //deixa ativa a tab correta
-  $( "#tabs" ).tabs( "option", "active", numero );
+  jQuery( "#tabs" ).tabs( "option", "active", numero );
 
   //coloca função para redesenhar gráfico quando mudar Tab e mudar endereço da barra
-  $( "#tabs" ).tabs({
+  jQuery( "#tabs" ).tabs({
     beforeActivate: function( event, ui ) {
-        $("#media_edados").hide()
-        $("#todos_institutos").hide()
-        $("#turno").hide()
+        jQuery("#media_edados").hide()
+        jQuery("#todos_institutos").hide()
+        jQuery("#turno").hide()
         }
   });
   
-  $( "#tabs" ).tabs({
+  jQuery( "#tabs" ).tabs({
     activate: function( event, ui ) {
         var grafico = ui.newPanel.selector.split("-")[1]
             mude_esse = null
         if (grafico == "1") {
             muda_media("valido")
-            $("#media_edados").fadeIn("normal")            
+            jQuery("#media_edados").fadeIn("normal")            
             location.search = "?grafico=media";
         }
         else if (grafico == "2") {
             muda_todos("valido")
-            $("#todos_institutos").fadeIn("normal")            
+            jQuery("#todos_institutos").fadeIn("normal")            
             location.search = "?grafico=1turno";
         }            
         else if (grafico == "3") {
             muda_turno("valido")
-            $("#turno").fadeIn("normal")            
+            jQuery("#turno").fadeIn("normal")            
             location.search = "?grafico=2marina";
         }
     }
@@ -68,7 +68,7 @@ window.data_media = null
 window.data_todos = null
 window.data_turno = null
 
-width = $(window).width()*0.8
+width = jQuery(window).width()*0.8
 margin = 200
 
 //div para linha de 50%
@@ -152,8 +152,8 @@ function intencao_voto() {
         myChart = arruma_tooltip(myChart,"todos")
         
         //arruma campos na legenda
-        $("text[class*='dimple-eduardo-campos']").text("Ed. Campos")
-        $("text[class*='dimple-pastor-everaldo']").text("P. Everaldo")
+        jQuery("text[class*='dimple-eduardo-campos']").text("Ed. Campos")
+        jQuery("text[class*='dimple-pastor-everaldo']").text("P. Everaldo")
         
      });
 }
@@ -214,8 +214,8 @@ function media_edados() {
         jQuery("#media_edados").find("text").css({"font-size":"12px"})
 
         //arruma campos na legenda
-        $("text[class*='dimple-eduardo-campos']").text("Ed. Campos")
-        $("text[class*='dimple-pastor-everaldo']").text("P. Everaldo")
+        jQuery("text[class*='dimple-eduardo-campos']").text("Ed. Campos")
+        jQuery("text[class*='dimple-pastor-everaldo']").text("P. Everaldo")
 
         window.grafico_media = myChart
 
@@ -299,9 +299,9 @@ function segundo_turno() {
 
 
 function arruma_50() {
-    $("circle[id*='metade']").remove()
+    jQuery("circle[id*='metade']").remove()
     
-    $("path[id*='metade']")
+    jQuery("path[id*='metade']")
         .css({
             "stroke": "#000000",
             "stroke-dasharray":"5.5",
