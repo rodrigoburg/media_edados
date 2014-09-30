@@ -70,6 +70,7 @@ window.data_turno = null
 width = jQuery(window).width()
 margin = width/6
 
+alert(width)
 //div para linha de 50%
 var div_turno = d3.select("body").append("div")
     .attr("class", "tooltip")
