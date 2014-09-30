@@ -25,7 +25,7 @@ function desenha_pesquisas() {
 
 function intencao_voto() {
     var svg = dimple.newSvg("#todos_institutos", width, 500);
-      d3.csv("dados/todos_institutos.csv", function (data) {
+      d3.csv("http://blog.estadaodados.com/projs/media_edados/dados/todos_institutos.csv", function (data) {
         window.data_todos = data
         //filtra votos totais ou validos
         recorte = window.todos   
@@ -139,7 +139,7 @@ function bolinhas_preto() {
 
 function segundo_turno() {
     var svg = dimple.newSvg("#turno", width, 500);
-      d3.csv("dados/segundo_turno.csv", function (data) {
+      d3.csv("http://blog.estadaodados.com/projs/media_edados/dados/segundo_turno.csv", function (data) {
         window.data_turno = data
         //filtra votos totais ou validos
         recorte = window.turno   
@@ -363,7 +363,7 @@ function muda_media(recorte) {
 
 function media_edados() {
     var svg = dimple.newSvg("#media_edados", width, 500);
-      d3.csv("dados/media_edados.csv", function (data) {
+      d3.csv("http://blog.estadaodados.com/projs/media_edados/dados/media_edados.csv", function (data) {
         window.data_media = data
         //filtra votos totais ou validos
         recorte = window.media
