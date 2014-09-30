@@ -250,6 +250,15 @@ function muda_todos(recorte) {
     
     myChart = arruma_tooltip(myChart,"todos")
     
+    //arruma linha de 50% para começar lá no início
+    datas = dimple.getUniqueValues(data,"data")
+    primeira_data = datas[0]
+    ultima_data = datas[datas.length-1]
+    myChart.series[2].data = [
+        { "metade" : "metade", "valor" : 50, "data" : primeira_data }, 
+        { "metade" : "metade", "valor" : 50, "data" :  ultima_data}];
+    
+    
     myChart.draw(500)
     //muda tamanho do texto
     jQuery("#todos_institutos").find("text").css({"font-size":"12px"})
@@ -301,7 +310,14 @@ function muda_media(recorte) {
     }
     
     myChart = arruma_tooltip(myChart,"media")
-    
+    //arruma linha de 50% para começar lá no início
+    datas = dimple.getUniqueValues(data,"data")
+    primeira_data = datas[0]
+    ultima_data = datas[datas.length-1]
+    myChart.series[1].data = [
+        { "metade" : "metade", "valor" : 50, "data" : primeira_data }, 
+        { "metade" : "metade", "valor" : 50, "data" :  ultima_data}];
+        
     myChart.draw(500)
     //muda tamanho do texto
     jQuery("#media_edados").find("text").css({"font-size":"12px"})
