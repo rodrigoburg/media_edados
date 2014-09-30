@@ -68,7 +68,7 @@ window.data_todos = null
 window.data_turno = null
 
 width = jQuery(window).width()
-margin = width/5
+margin = Math.max(width/8,50)
 
 //div para linha de 50%
 var div_turno = d3.select("body").append("div")
