@@ -1,6 +1,6 @@
 //onde está os dados
 path = "http://blog.estadaodados.com/projs/media_edados/"
-//path = ""
+path = ""
 //cria as tabs e deixa ativa a que for informada na url
 jQuery(function() {
   jQuery( "#tabs" ).tabs();
@@ -97,7 +97,7 @@ function intencao_voto() {
         data = dimple.filterData(data,"voto",recorte)
         var ibope_datafolha = dimple.filterData(data,"instituto",["Ibope","Datafolha"])
         
-        myChart.setBounds(60, 30, width-margin, 405);
+        myChart.setBounds(25, 30, width-margin, 405);
         var x = myChart.addTimeAxis("x", "data","%Y-%m-%dT%H","%d/%m");
         x.title = ""
 
@@ -172,7 +172,7 @@ function media_edados() {
         
         data = dimple.filterData(data,"voto",recorte)
         var myChart = new dimple.chart(svg, data);        
-        myChart.setBounds(60, 30, width-margin, 405);
+        myChart.setBounds(25, 30, width-margin, 405);
         var x = myChart.addTimeAxis("x", "data","%Y-%m-%dT%H","%d/%m");
         x.title = ""
 
@@ -244,7 +244,7 @@ function segundo_turno() {
         data = dimple.filterData(data,"voto",recorte)
         var ibope_datafolha = dimple.filterData(data,"instituto",["Ibope","Datafolha"])
         
-        myChart.setBounds(60, 30, width-margin, 405);
+        myChart.setBounds(25, 30, width-margin, 405);
         var x = myChart.addTimeAxis("x", "data","%Y-%m-%dT%H","%d/%m");
         x.title = ""
 
