@@ -348,11 +348,12 @@ function muda_todos(recorte) {
     
         myChart = arruma_tooltip(myChart,"todos")
     
+        //arruma linha de 50% para começar lá no início
+        var datas = dimple.getUniqueValues(data,"data")
+        var primeira_data = datas[0]
+        var ultima_data = datas[datas.length-1]
+
         if (recorte == "valido") {
-            //arruma linha de 50% para começar lá no início
-            var datas = dimple.getUniqueValues(data,"data")
-            var primeira_data = datas[0]
-            var ultima_data = datas[datas.length-1]
             myChart.series[2].data = [
                 { "metade" : "metade", "valor" : 50, "data" : primeira_data }, 
                 { "metade" : "metade", "valor" : 50, "data" :  ultima_data}];
@@ -379,11 +380,10 @@ function muda_todos(recorte) {
 function muda_turno(recorte) {
     var myChart = window.grafico_turno
     if (myChart != null) {
-    
         var data = window.data_turno
         data = dimple.filterData(data,"voto",recorte)
         var ibope_datafolha = dimple.filterData(data,"instituto",["Ibope","Datafolha"])
-    
+
         var legenda = myChart.legends
         legenda_getEntries = function () {
            return arruma_legenda(myChart,"turno")
@@ -392,11 +392,12 @@ function muda_turno(recorte) {
         myChart.series[0].data = ibope_datafolha
         myChart.series[1].data = data
     
+        //arruma linha de 50% para começar lá no início
+        var datas = dimple.getUniqueValues(data,"data")
+        var primeira_data = datas[0]
+        var ultima_data = datas[datas.length-1]
+        
         if (recorte == "valido") {
-            //arruma linha de 50% para começar lá no início
-            var datas = dimple.getUniqueValues(data,"data")
-            var primeira_data = datas[0]
-            var ultima_data = datas[datas.length-1]
             myChart.series[2].data = [
                 { "metade" : "metade", "valor" : 50, "data" : primeira_data }, 
                 { "metade" : "metade", "valor" : 50, "data" :  ultima_data}];
@@ -407,7 +408,6 @@ function muda_turno(recorte) {
                 { "metade" : "metade", "valor" : 0, "data" :  primeira_data}];
         }
         myChart = arruma_tooltip(myChart,"todos")
-    
         myChart.draw(500)
         //muda tamanho do texto
         jQuery("#turno").find("text").css({"font-size":"12px"})
@@ -438,11 +438,12 @@ function muda_media(recorte) {
     
         myChart = arruma_tooltip(myChart,"media")
 
+        //arruma linha de 50% para começar lá no início
+        var datas = dimple.getUniqueValues(data,"data")
+        var primeira_data = datas[0]
+        var ultima_data = datas[datas.length-1]
+
         if (recorte == "valido") {
-            //arruma linha de 50% para começar lá no início
-            var datas = dimple.getUniqueValues(data,"data")
-            var primeira_data = datas[0]
-            var ultima_data = datas[datas.length-1]
             myChart.series[1].data = [
                 { "metade" : "metade", "valor" : 50, "data" : primeira_data }, 
                 { "metade" : "metade", "valor" : 50, "data" :  ultima_data}];
