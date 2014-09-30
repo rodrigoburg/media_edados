@@ -250,13 +250,20 @@ function muda_todos(recorte) {
     
     myChart = arruma_tooltip(myChart,"todos")
     
-    //arruma linha de 50% para começar lá no início
-    datas = dimple.getUniqueValues(data,"data")
-    primeira_data = datas[0]
-    ultima_data = datas[datas.length-1]
-    myChart.series[2].data = [
-        { "metade" : "metade", "valor" : 50, "data" : primeira_data }, 
-        { "metade" : "metade", "valor" : 50, "data" :  ultima_data}];
+    if (recorte == "valido") {
+        //arruma linha de 50% para começar lá no início
+        datas = dimple.getUniqueValues(data,"data")
+        primeira_data = datas[0]
+        ultima_data = datas[datas.length-1]
+        myChart.series[2].data = [
+            { "metade" : "metade", "valor" : 50, "data" : primeira_data }, 
+            { "metade" : "metade", "valor" : 50, "data" :  ultima_data}];
+    } else {
+        //soma a linha se for votos totais
+        myChart.series[2].data = [
+            { "metade" : "metade", "valor" : 0, "data" : primeira_data }, 
+            { "metade" : "metade", "valor" : 0, "data" :  primeira_data}];
+    }
     
     
     myChart.draw(500)
@@ -266,6 +273,8 @@ function muda_todos(recorte) {
 //    setTimeout(function () { bolinhas_preto();    }, 500);
 
     window.grafico_todos = myChart
+
+    arruma_50();
 
 }
 
@@ -283,6 +292,20 @@ function muda_turno(recorte) {
     myChart.series[0].data = ibope_datafolha
     myChart.series[1].data = data
     
+    if (recorte == "valido") {
+        //arruma linha de 50% para começar lá no início
+        datas = dimple.getUniqueValues(data,"data")
+        primeira_data = datas[0]
+        ultima_data = datas[datas.length-1]
+        myChart.series[2].data = [
+            { "metade" : "metade", "valor" : 50, "data" : primeira_data }, 
+            { "metade" : "metade", "valor" : 50, "data" :  ultima_data}];
+    } else {
+        //soma a linha se for votos totais
+        myChart.series[2].data = [
+            { "metade" : "metade", "valor" : 0, "data" : primeira_data }, 
+            { "metade" : "metade", "valor" : 0, "data" :  primeira_data}];
+    }
     myChart = arruma_tooltip(myChart,"todos")
     
     myChart.draw(500)
@@ -292,7 +315,8 @@ function muda_turno(recorte) {
 //    setTimeout(function () { bolinhas_preto();    }, 500);
 
     window.grafico_turno = myChart
-
+    
+    arruma_50();
 }
 
 
@@ -310,13 +334,21 @@ function muda_media(recorte) {
     }
     
     myChart = arruma_tooltip(myChart,"media")
-    //arruma linha de 50% para começar lá no início
-    datas = dimple.getUniqueValues(data,"data")
-    primeira_data = datas[0]
-    ultima_data = datas[datas.length-1]
-    myChart.series[1].data = [
-        { "metade" : "metade", "valor" : 50, "data" : primeira_data }, 
-        { "metade" : "metade", "valor" : 50, "data" :  ultima_data}];
+
+    if (recorte == "valido") {
+        //arruma linha de 50% para começar lá no início
+        datas = dimple.getUniqueValues(data,"data")
+        primeira_data = datas[0]
+        ultima_data = datas[datas.length-1]
+        myChart.series[1].data = [
+            { "metade" : "metade", "valor" : 50, "data" : primeira_data }, 
+            { "metade" : "metade", "valor" : 50, "data" :  ultima_data}];
+    } else {
+        //soma a linha se for votos totais
+        myChart.series[1].data = [
+            { "metade" : "metade", "valor" : 0, "data" : primeira_data }, 
+            { "metade" : "metade", "valor" : 0, "data" :  primeira_data}];
+    }
         
     myChart.draw(500)
     //muda tamanho do texto
@@ -326,6 +358,7 @@ function muda_media(recorte) {
 
     window.grafico_media = myChart
     
+    arruma_50();
 }
 
 function media_edados() {
