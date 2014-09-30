@@ -28,31 +28,31 @@ jQuery(function() {
   jQuery( "#tabs" ).tabs( "option", "active", numero );
 
   //coloca função para redesenhar gráfico quando mudar Tab e mudar endereço da barra
-  jQuery( "#tabs" ).tabs({
+/*  jQuery( "#tabs" ).tabs({
     beforeActivate: function( event, ui ) {
         jQuery("#media_edados").hide()
         jQuery("#todos_institutos").hide()
         jQuery("#turno").hide()
         }
   });
-  
+  */
   jQuery( "#tabs" ).tabs({
     activate: function( event, ui ) {
         var grafico = ui.newPanel.selector.split("-")[1]
             mude_esse = null
         if (grafico == "1") {
             muda_media("valido")
-            jQuery("#media_edados").fadeIn("normal")            
+//            jQuery("#media_edados").fadeIn("normal")            
             location.search = "?grafico=media";
         }
         else if (grafico == "2") {
             muda_todos("valido")
-            jQuery("#todos_institutos").fadeIn("normal")            
+//            jQuery("#todos_institutos").fadeIn("normal")            
             location.search = "?grafico=1turno";
         }            
         else if (grafico == "3") {
             muda_turno("valido")
-            jQuery("#turno").fadeIn("normal")            
+ //           jQuery("#turno").fadeIn("normal")            
             location.search = "?grafico=2marina";
         }
     }
