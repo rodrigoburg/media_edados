@@ -1,6 +1,6 @@
 //onde está os dados
 path = "http://blog.estadaodados.com/projs/media_edados/"
-//path = ""
+path = ""
 //cria as tabs e deixa ativa a que for informada na url
 jQuery(function() {
   jQuery( "#tabs" ).tabs();
@@ -23,36 +23,32 @@ jQuery(function() {
   else if (tab == "2marina") 
       numero = 2
 
+  //desenha o primeiro gráfico
+  desenha_pesquisas(tab)
 
   //deixa ativa a tab correta
   jQuery( "#tabs" ).tabs( "option", "active", numero );
 
   //coloca função para redesenhar gráfico quando mudar Tab e mudar endereço da barra
-/*  jQuery( "#tabs" ).tabs({
-    beforeActivate: function( event, ui ) {
-        jQuery("#media_edados").hide()
-        jQuery("#todos_institutos").hide()
-        jQuery("#turno").hide()
-        }
-  });
-  */
   jQuery( "#tabs" ).tabs({
     activate: function( event, ui ) {
         var grafico = ui.newPanel.selector.split("-")[1]
-            mude_esse = null
         if (grafico == "1") {
+            if (window.grafico_media == null) 
+                desenha_pesquisas("media")        
             muda_media("valido")
-//            jQuery("#media_edados").fadeIn("normal")            
             location.hash = "#grafico=media";
         }
         else if (grafico == "2") {
+            if (window.grafico_todos == null) 
+                desenha_pesquisas("1turno")        
             muda_todos("valido")
-//            jQuery("#todos_institutos").fadeIn("normal")            
             location.hash = "#grafico=1turno";
         }            
         else if (grafico == "3") {
             muda_turno("valido")
- //           jQuery("#turno").fadeIn("normal")            
+            if (window.grafico_turno == null) 
+                desenha_pesquisas("2marina")        
             location.hash = "#grafico=2marina";
         }
     }
@@ -80,10 +76,13 @@ var div_turno = d3.select("body").append("div")
     .style("opacity", 0);
 
 
-function desenha_pesquisas() {
-    intencao_voto();
-    media_edados();
-    segundo_turno();
+function desenha_pesquisas(tab) {
+    if (tab == "1turno")
+        intencao_voto();
+    else if (tab == "media")
+        media_edados();
+    else if (tab == "2marina")
+        segundo_turno();
 }
 
 function intencao_voto() {
@@ -91,29 +90,28 @@ function intencao_voto() {
       d3.csv(path+"dados/todos_institutos.csv", function (data) {
         window.data_todos = data
         //filtra votos totais ou validos
-        recorte = window.todos   
+        var recorte = window.todos   
         var myChart = new dimple.chart(svg, data);
         myChart = arruma_tooltip(myChart,"todos")
-        
 
         data = dimple.filterData(data,"voto",recorte)
-        ibope_datafolha = dimple.filterData(data,"instituto",["Ibope","Datafolha"])
+        var ibope_datafolha = dimple.filterData(data,"instituto",["Ibope","Datafolha"])
         
         myChart.setBounds(60, 30, width-margin, 405);
         var x = myChart.addTimeAxis("x", "data","%Y-%m-%dT%H","%d/%m");
         x.title = ""
 
-        y = myChart.addMeasureAxis("y", "valor");
+        var y = myChart.addMeasureAxis("y", "valor");
         y.overrideMax = 50.0
         
         //primeira série, linha com datafolha e ibope apenas
-        series = myChart.addSeries("candidato", dimple.plot.line);
+        var series = myChart.addSeries("candidato", dimple.plot.line);
         series.data = ibope_datafolha
         series.lineWeight = 1.8;
         series.interpolation = "cardinal";
                 
         //segunda série, só as bolhas. são duas séries apenas para eu pegar o valor do instituto na tooltip
-        series2 = myChart.addSeries(["candidato","instituto"], dimple.plot.bubble)
+        var series2 = myChart.addSeries(["candidato","instituto"], dimple.plot.bubble)
         series2.data = data
 
         myChart.assignColor("Aécio Neves","#1C4587");
@@ -123,18 +121,18 @@ function intencao_voto() {
         myChart.assignColor("Outros","#2E2B2D");
 
         //faz uma série nova que será a linha cinza de 50%
-        datas = dimple.getUniqueValues(data,"data")
+        var datas = dimple.getUniqueValues(data,"data")
         var s3 = myChart.addSeries("metade", dimple.plot.line);
         
-        primeira_data = datas[0]
-        ultima_data = datas[datas.length-1]
+        var primeira_data = datas[0]
+        var ultima_data = datas[datas.length-1]
 
         s3.data = [
             { "metade" : "metade", "valor" : 50, "data" : primeira_data }, 
             { "metade" : "metade", "valor" : 50, "data" :  ultima_data}];
 
         //arruma ordem da legenda
-        legenda = myChart.addLegend(70, 8, width, 30, "left");
+        var legenda = myChart.addLegend(70, 8, width, 30, "left");
         legenda._getEntries = function () {
            return arruma_legenda(myChart,recorte)
         }
@@ -149,23 +147,27 @@ function intencao_voto() {
 
         //muda tamanho do texto
         jQuery("#todos_institutos").find("text").css({"font-size":"12px"})
-
-        window.grafico_todos = myChart
         
+        window.grafico_todos = myChart
+
         myChart = arruma_tooltip(myChart,"todos")
         
         //arruma campos na legenda
         jQuery("text[class*='dimple-eduardo-campos']").text("Ed. Campos")
         jQuery("text[class*='dimple-pastor-everaldo']").text("P. Everaldo")
         
+        //arruma a barra de 50%
+        arruma_50()
+        
      });
 }
+
 function media_edados() {
     var svg = dimple.newSvg("#media_edados", width, 500);
       d3.csv(path+"dados/media_edados.csv", function (data) {
         window.data_media = data
         //filtra votos totais ou validos
-        recorte = window.media
+        var recorte = window.media
         
         
         data = dimple.filterData(data,"voto",recorte)
@@ -174,18 +176,18 @@ function media_edados() {
         var x = myChart.addTimeAxis("x", "data","%Y-%m-%dT%H","%d/%m");
         x.title = ""
 
-        y = myChart.addMeasureAxis("y", "valor");
+        var y = myChart.addMeasureAxis("y", "valor");
         y.overrideMax = 50.0
 
-        series = myChart.addSeries("candidato", dimple.plot.line);
+        var series = myChart.addSeries("candidato", dimple.plot.line);
         series.lineWeight = 2;
 
         //faz uma série nova que será a linha cinza de 50%
-        datas = dimple.getUniqueValues(data,"data")
+        var datas = dimple.getUniqueValues(data,"data")
         var s3 = myChart.addSeries("metade", dimple.plot.line);
         
-        primeira_data = datas[0]
-        ultima_data = datas[datas.length-1]
+        var primeira_data = datas[0]
+        var ultima_data = datas[datas.length-1]
 
         s3.data = [
             { "metade" : "metade", "valor" : 50, "data" : primeira_data }, 
@@ -200,7 +202,7 @@ function media_edados() {
         myChart = arruma_tooltip(myChart,"media")
 
         //arruma ordem da legenda
-        legenda = myChart.addLegend(70, 8, width, 30, "left");
+        var legenda = myChart.addLegend(70, 8, width, 30, "left");
         legenda._getEntries = function () {
            return arruma_legenda(myChart,recorte)
         }
@@ -235,36 +237,36 @@ function segundo_turno() {
       d3.csv(path+"dados/segundo_turno.csv", function (data) {
         window.data_turno = data
         //filtra votos totais ou validos
-        recorte = window.turno   
+        var recorte = window.turno   
         var myChart = new dimple.chart(svg, data);
         myChart = arruma_tooltip(myChart,"todos")        
 
         data = dimple.filterData(data,"voto",recorte)
-        ibope_datafolha = dimple.filterData(data,"instituto",["Ibope","Datafolha"])
+        var ibope_datafolha = dimple.filterData(data,"instituto",["Ibope","Datafolha"])
         
         myChart.setBounds(60, 30, width-margin, 405);
         var x = myChart.addTimeAxis("x", "data","%Y-%m-%dT%H","%d/%m");
         x.title = ""
 
-        y = myChart.addMeasureAxis("y", "valor");
+        var y = myChart.addMeasureAxis("y", "valor");
         y.overrideMax = 60.0
         
         //primeira série, linha com datafolha e ibope apenas
-        series = myChart.addSeries("candidato", dimple.plot.line);
+        var series = myChart.addSeries("candidato", dimple.plot.line);
         series.data = ibope_datafolha
         series.lineWeight = 1.8;
         series.interpolation = "cardinal";
                 
         //segunda série, só as bolhas. são duas séries apenas para eu pegar o valor do instituto na tooltip
-        series2 = myChart.addSeries(["candidato","instituto"], dimple.plot.bubble)
+        var series2 = myChart.addSeries(["candidato","instituto"], dimple.plot.bubble)
         series2.data = data
 
         //faz uma série nova que será a linha cinza de 50%
-        datas = dimple.getUniqueValues(data,"data")
+        var datas = dimple.getUniqueValues(data,"data")
         var s3 = myChart.addSeries("metade", dimple.plot.line);
         
-        primeira_data = datas[0]
-        ultima_data = datas[datas.length-1]
+        var primeira_data = datas[0]
+        var ultima_data = datas[datas.length-1]
 
         s3.data = [
             { "metade" : "metade", "valor" : 50, "data" : primeira_data }, 
@@ -275,7 +277,7 @@ function segundo_turno() {
         myChart.assignColor("Marina Silva","#E69138");
 
         //arruma ordem da legenda
-        legenda = myChart.addLegend(70, 8, width, 20, "left");
+        var legenda = myChart.addLegend(70, 8, width, 20, "left");
         legenda._getEntries = function () {
            return arruma_legenda(myChart,"turno")
         }
@@ -290,9 +292,9 @@ function segundo_turno() {
 
         //muda tamanho do texto
         jQuery("#turno").find("text").css({"font-size":"12px"})
-
-        window.grafico_turno = myChart
         
+        window.grafico_turno = myChart
+
         myChart = arruma_tooltip(myChart,"todos")
         
         //arruma a barra de 50%
@@ -328,131 +330,139 @@ function arruma_50() {
             .style("opacity", 0);
         });
 }
+
 function muda_todos(recorte) {
-    myChart = window.grafico_todos
-    data = window.data_todos
-    data = dimple.filterData(data,"voto",recorte)
-    ibope_datafolha = dimple.filterData(data,"instituto",["Ibope","Datafolha"])
+    var myChart = window.grafico_todos
+    if (myChart != null) {
+        var data = window.data_todos
+        data = dimple.filterData(data,"voto",recorte)
+        var ibope_datafolha = dimple.filterData(data,"instituto",["Ibope","Datafolha"])
     
-    legenda = myChart.legends
-    legenda_getEntries = function () {
-       return arruma_legenda(myChart,recorte)
+        var legenda = myChart.legends
+        legenda_getEntries = function () {
+           return arruma_legenda(myChart,recorte)
+        }
+    
+        myChart.series[0].data = ibope_datafolha
+        myChart.series[1].data = data
+    
+        myChart = arruma_tooltip(myChart,"todos")
+    
+        if (recorte == "valido") {
+            //arruma linha de 50% para começar lá no início
+            var datas = dimple.getUniqueValues(data,"data")
+            var primeira_data = datas[0]
+            var ultima_data = datas[datas.length-1]
+            myChart.series[2].data = [
+                { "metade" : "metade", "valor" : 50, "data" : primeira_data }, 
+                { "metade" : "metade", "valor" : 50, "data" :  ultima_data}];
+        } else {
+            //soma a linha se for votos totais
+            myChart.series[2].data = [
+                { "metade" : "metade", "valor" : 0, "data" : primeira_data }, 
+                { "metade" : "metade", "valor" : 0, "data" :  primeira_data}];
+        }
+    
+    
+        myChart.draw(500)
+        //muda tamanho do texto
+        jQuery("#todos_institutos").find("text").css({"font-size":"12px"})
+
+    //    setTimeout(function () { bolinhas_preto();    }, 500);
+
+        window.grafico_todos = myChart
+
+        arruma_50();        
     }
-    
-    myChart.series[0].data = ibope_datafolha
-    myChart.series[1].data = data
-    
-    myChart = arruma_tooltip(myChart,"todos")
-    
-    if (recorte == "valido") {
-        //arruma linha de 50% para começar lá no início
-        datas = dimple.getUniqueValues(data,"data")
-        primeira_data = datas[0]
-        ultima_data = datas[datas.length-1]
-        myChart.series[2].data = [
-            { "metade" : "metade", "valor" : 50, "data" : primeira_data }, 
-            { "metade" : "metade", "valor" : 50, "data" :  ultima_data}];
-    } else {
-        //soma a linha se for votos totais
-        myChart.series[2].data = [
-            { "metade" : "metade", "valor" : 0, "data" : primeira_data }, 
-            { "metade" : "metade", "valor" : 0, "data" :  primeira_data}];
-    }
-    
-    
-    myChart.draw(500)
-    //muda tamanho do texto
-    jQuery("#todos_institutos").find("text").css({"font-size":"12px"})
-
-//    setTimeout(function () { bolinhas_preto();    }, 500);
-
-    window.grafico_todos = myChart
-
-    arruma_50();
-
 }
 
 function muda_turno(recorte) {
-    myChart = window.grafico_turno
-    data = window.data_turno
-    data = dimple.filterData(data,"voto",recorte)
-    ibope_datafolha = dimple.filterData(data,"instituto",["Ibope","Datafolha"])
+    var myChart = window.grafico_turno
+    if (myChart != null) {
     
-    legenda = myChart.legends
-    legenda_getEntries = function () {
-       return arruma_legenda(myChart,"turno")
-    }
+        var data = window.data_turno
+        data = dimple.filterData(data,"voto",recorte)
+        var ibope_datafolha = dimple.filterData(data,"instituto",["Ibope","Datafolha"])
     
-    myChart.series[0].data = ibope_datafolha
-    myChart.series[1].data = data
+        var legenda = myChart.legends
+        legenda_getEntries = function () {
+           return arruma_legenda(myChart,"turno")
+        }
     
-    if (recorte == "valido") {
-        //arruma linha de 50% para começar lá no início
-        datas = dimple.getUniqueValues(data,"data")
-        primeira_data = datas[0]
-        ultima_data = datas[datas.length-1]
-        myChart.series[2].data = [
-            { "metade" : "metade", "valor" : 50, "data" : primeira_data }, 
-            { "metade" : "metade", "valor" : 50, "data" :  ultima_data}];
-    } else {
-        //soma a linha se for votos totais
-        myChart.series[2].data = [
-            { "metade" : "metade", "valor" : 0, "data" : primeira_data }, 
-            { "metade" : "metade", "valor" : 0, "data" :  primeira_data}];
-    }
-    myChart = arruma_tooltip(myChart,"todos")
+        myChart.series[0].data = ibope_datafolha
+        myChart.series[1].data = data
     
-    myChart.draw(500)
-    //muda tamanho do texto
-    jQuery("#turno").find("text").css({"font-size":"12px"})
+        if (recorte == "valido") {
+            //arruma linha de 50% para começar lá no início
+            var datas = dimple.getUniqueValues(data,"data")
+            var primeira_data = datas[0]
+            var ultima_data = datas[datas.length-1]
+            myChart.series[2].data = [
+                { "metade" : "metade", "valor" : 50, "data" : primeira_data }, 
+                { "metade" : "metade", "valor" : 50, "data" :  ultima_data}];
+        } else {
+            //soma a linha se for votos totais
+            myChart.series[2].data = [
+                { "metade" : "metade", "valor" : 0, "data" : primeira_data }, 
+                { "metade" : "metade", "valor" : 0, "data" :  primeira_data}];
+        }
+        myChart = arruma_tooltip(myChart,"todos")
+    
+        myChart.draw(500)
+        //muda tamanho do texto
+        jQuery("#turno").find("text").css({"font-size":"12px"})
 
-//    setTimeout(function () { bolinhas_preto();    }, 500);
+    //    setTimeout(function () { bolinhas_preto();    }, 500);
 
-    window.grafico_turno = myChart
+        window.grafico_turno = myChart
     
-    arruma_50();
+        arruma_50();
+    }
 }
 
 
 
 function muda_media(recorte) {
-    myChart = window.grafico_media
-    data = window.data_media
-    data = dimple.filterData(data,"voto",recorte)
+    var myChart = window.grafico_media
+    if (myChart != null) {
     
-    myChart.data = data
+        var data = window.data_media
+        data = dimple.filterData(data,"voto",recorte)
     
-    legenda = myChart.legends
-    legenda_getEntries = function () {
-       return arruma_legenda(myChart,recorte)
-    }
+        myChart.data = data
     
-    myChart = arruma_tooltip(myChart,"media")
+        var legenda = myChart.legends
+        legenda_getEntries = function () {
+           return arruma_legenda(myChart,recorte)
+        }
+    
+        myChart = arruma_tooltip(myChart,"media")
 
-    if (recorte == "valido") {
-        //arruma linha de 50% para começar lá no início
-        datas = dimple.getUniqueValues(data,"data")
-        primeira_data = datas[0]
-        ultima_data = datas[datas.length-1]
-        myChart.series[1].data = [
-            { "metade" : "metade", "valor" : 50, "data" : primeira_data }, 
-            { "metade" : "metade", "valor" : 50, "data" :  ultima_data}];
-    } else {
-        //soma a linha se for votos totais
-        myChart.series[1].data = [
-            { "metade" : "metade", "valor" : 0, "data" : primeira_data }, 
-            { "metade" : "metade", "valor" : 0, "data" :  primeira_data}];
-    }
+        if (recorte == "valido") {
+            //arruma linha de 50% para começar lá no início
+            var datas = dimple.getUniqueValues(data,"data")
+            var primeira_data = datas[0]
+            var ultima_data = datas[datas.length-1]
+            myChart.series[1].data = [
+                { "metade" : "metade", "valor" : 50, "data" : primeira_data }, 
+                { "metade" : "metade", "valor" : 50, "data" :  ultima_data}];
+        } else {
+            //soma a linha se for votos totais
+            myChart.series[1].data = [
+                { "metade" : "metade", "valor" : 0, "data" : primeira_data }, 
+                { "metade" : "metade", "valor" : 0, "data" :  primeira_data}];
+        }
         
-    myChart.draw(500)
-    //muda tamanho do texto
-    jQuery("#media_edados").find("text").css({"font-size":"12px"})
+        myChart.draw(500)
+        //muda tamanho do texto
+        jQuery("#media_edados").find("text").css({"font-size":"12px"})
 
-//    setTimeout(function () { bolinhas_preto();    }, 500);
+    //    setTimeout(function () { bolinhas_preto();    }, 500);
 
-    window.grafico_media = myChart
+        window.grafico_media = myChart
     
-    arruma_50();
+        arruma_50();
+    }
 }
 
 
@@ -490,6 +500,7 @@ function arruma_tooltip(chart,qual_dos_dois) {
 }
 
 function arruma_legenda(grafico, recorte) {
+    var orderedValues = []
     if (recorte == "total")
         orderedValues = ["Dilma Rousseff", "Aécio Neves", "Marina Silva", "Eduardo Campos","Outros"];
     else if (recorte == "turno")
