@@ -1,6 +1,6 @@
 //onde está os dados
 path = "http://blog.estadaodados.com/projs/media_edados/"
-//path = ""
+path = ""
 //cria as tabs e deixa ativa a que for informada na url
 jQuery(function() {
   jQuery( "#tabs" ).tabs();
@@ -227,7 +227,6 @@ function media_edados() {
         //arruma a barra de 50%
         arruma_50()
       });
-
 
 }
 
