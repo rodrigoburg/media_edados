@@ -1,0 +1,81 @@
+data,instituto,candidato,valor,voto
+2014-08-15T01,Datafolha,Dilma Rousseff,47,total
+2014-08-15T01,Datafolha,Aécio Neves,39,total
+2014-08-24T01,MDA,Dilma Rousseff,43,total
+2014-08-24T01,MDA,Aécio Neves,33,total
+2014-08-25T01,Ibope,Dilma Rousseff,41,total
+2014-08-25T01,Ibope,Aécio Neves,35,total
+2014-08-29T01,Datafolha,Dilma Rousseff,48,total
+2014-08-29T01,Datafolha,Aécio Neves,40,total
+2014-09-02T01,Ibope,Dilma Rousseff,47,total
+2014-09-02T01,Ibope,Aécio Neves,34,total
+2014-09-03T01,Datafolha,Dilma Rousseff,49,total
+2014-09-03T01,Datafolha,Aécio Neves,38,total
+2014-09-07T01,MDA,Dilma Rousseff,48,total
+2014-09-07T01,MDA,Aécio Neves,34,total
+2014-09-08T01,Ibope,Dilma Rousseff,48,total
+2014-09-08T01,Ibope,Aécio Neves,33,total
+2014-09-09T01,Datafolha,Dilma Rousseff,49,total
+2014-09-09T01,Datafolha,Aécio Neves,38,total
+2014-09-14T01,Vox Populi,Dilma Rousseff,44,total
+2014-09-14T01,Vox Populi,Aécio Neves,36,total
+2014-09-15T01,Ibope,Dilma Rousseff,44,total
+2014-09-15T01,Ibope,Aécio Neves,37,total
+2014-09-18T01,Datafolha,Dilma Rousseff,49,total
+2014-09-18T01,Datafolha,Aécio Neves,39,total
+2014-09-21T01,MDA,Dilma Rousseff,46,total
+2014-09-21T01,MDA,Aécio Neves,37,total
+2014-09-22T01,Ibope,Dilma Rousseff,46,total
+2014-09-22T01,Ibope,Aécio Neves,35,total
+2014-09-23T01,Vox Populi,Dilma Rousseff,45,total
+2014-09-23T01,Vox Populi,Aécio Neves,37,total
+2014-09-26T01,Datafolha,Dilma Rousseff,50,total
+2014-09-26T01,Datafolha,Aécio Neves,39,total
+2014-09-26T02,Sensus,Dilma Rousseff,43,total
+2014-09-26T02,Sensus,Aécio Neves,38,total
+2014-09-28T01,MDA,Dilma Rousseff,49,total
+2014-09-28T01,MDA,Aécio Neves,37,total
+2014-09-29T01,Ibope,Dilma Rousseff,45,total
+2014-09-29T01,Ibope,Aécio Neves,35,total
+2014-09-29T12,Datafolha,Dilma Rousseff,50,total
+2014-09-29T12,Datafolha,Aécio Neves,41,total
+2014-08-15T01,Datafolha,Dilma Rousseff,55,valido
+2014-08-15T01,Datafolha,Aécio Neves,45,valido
+2014-08-24T01,MDA,Dilma Rousseff,57,valido
+2014-08-24T01,MDA,Aécio Neves,43,valido
+2014-08-25T01,Ibope,Dilma Rousseff,54,valido
+2014-08-25T01,Ibope,Aécio Neves,46,valido
+2014-08-29T01,Datafolha,Dilma Rousseff,55,valido
+2014-08-29T01,Datafolha,Aécio Neves,45,valido
+2014-09-02T01,Ibope,Dilma Rousseff,58,valido
+2014-09-02T01,Ibope,Aécio Neves,42,valido
+2014-09-03T01,Datafolha,Dilma Rousseff,56,valido
+2014-09-03T01,Datafolha,Aécio Neves,44,valido
+2014-09-07T01,MDA,Dilma Rousseff,59,valido
+2014-09-07T01,MDA,Aécio Neves,41,valido
+2014-09-08T01,Ibope,Dilma Rousseff,59,valido
+2014-09-08T01,Ibope,Aécio Neves,41,valido
+2014-09-09T01,Datafolha,Dilma Rousseff,56,valido
+2014-09-09T01,Datafolha,Aécio Neves,44,valido
+2014-09-14T01,Vox Populi,Dilma Rousseff,55,valido
+2014-09-14T01,Vox Populi,Aécio Neves,45,valido
+2014-09-15T01,Ibope,Dilma Rousseff,54,valido
+2014-09-15T01,Ibope,Aécio Neves,46,valido
+2014-09-18T01,Datafolha,Dilma Rousseff,56,valido
+2014-09-18T01,Datafolha,Aécio Neves,44,valido
+2014-09-21T01,MDA,Dilma Rousseff,55,valido
+2014-09-21T01,MDA,Aécio Neves,45,valido
+2014-09-22T01,Ibope,Dilma Rousseff,57,valido
+2014-09-22T01,Ibope,Aécio Neves,43,valido
+2014-09-23T01,Vox Populi,Dilma Rousseff,55,valido
+2014-09-23T01,Vox Populi,Aécio Neves,45,valido
+2014-09-26T01,Datafolha,Dilma Rousseff,56,valido
+2014-09-26T01,Datafolha,Aécio Neves,44,valido
+2014-09-26T02,Sensus,Dilma Rousseff,53,valido
+2014-09-26T02,Sensus,Aécio Neves,47,valido
+2014-09-28T01,MDA,Dilma Rousseff,57,valido
+2014-09-28T01,MDA,Aécio Neves,43,valido
+2014-09-29T01,Ibope,Dilma Rousseff,56,valido
+2014-09-29T01,Ibope,Aécio Neves,44,valido
+2014-09-29T12,Datafolha,Dilma Rousseff,55,valido
+2014-09-29T12,Datafolha,Aécio Neves,45,valido

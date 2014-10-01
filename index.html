@@ -111,6 +111,32 @@
                 fill:#FFF;
                 stroke:#E69138;                
             }
+                        
+            #turno_aecio .dimple-bubble.dimple-ibope, #turno_aecio .dimple-bubble.dimple-datafolha {
+                opacity:1 !important;
+                stroke-width:6px !important;
+            }
+            #turno_aecio .dimple-marker {
+                stroke-width:0px !important;
+                opacity:1 !important;
+            }
+            #turno_aecio .dimple-bubble.dimple-dilma-rousseff.dimple-ibope, #turno_aecio .dimple-bubble.dimple-dilma-rousseff.dimple-datafolha {
+                fill:#CC0000;
+                stroke:#CC0000;
+            }
+            #turno_aecio .dimple-bubble.dimple-dilma-rousseff {
+                fill:#FFF;
+                stroke:#CC0000;
+            }
+            #turno_aecio .dimple-bubble.dimple-a-cio-neves.dimple-ibope, #turno_aecio .dimple-bubble.dimple-a-cio-neves.dimple-datafolha {
+                fill:#1C4587;
+                stroke:#1C4587;
+            }
+            #turno_aecio .dimple-bubble.dimple-a-cio-neves {
+                fill:#FFF;
+                stroke:#1C4587;                
+            }
+            
             
             .ui-widget-header {
                 background:none;
@@ -125,8 +151,9 @@
 <div id="tabs">
   <ul>
     <li><a href="#tabs-1">Média Estadão Dados</a></li>
-    <li><a href="#tabs-2">Todas as pesquisas - 1º turno</a></li>
-    <li><a href="#tabs-3">Todas as pesquisas - 2º turno com Marina</a></li>
+    <li><a href="#tabs-2">Pesquisas - 1º turno</a></li>
+    <li><a href="#tabs-3">Pesquisas- 2º turno com Marina</a></li>
+    <li><a href="#tabs-4">Pesquisas - 2º turno com Aécio</a></li>
   </ul>
   <div id="tabs-1">
     <span style="font-size:25px; padding-left:58px">Média Estadão Dados de intenção de voto</span>
@@ -156,6 +183,16 @@
         <div id="turno"></div>
     <p>Os pontos preenchidos correspondem a pesquisas dos institutos Datafolha e Ibope. Passe o mouse em cima de cada ponto para saber qual é o instituto responsável por cada pesquisa.</p>
     </div>
+    <div id="tabs-4">
+          <span style="font-size:25px; padding-left:58px">Todas as pesquisas - Simulação de 2º Turno</span>
+          <br>
+          <span class="seletor-turno_aecio" style="padding-left:58px"> <input type="radio" name="seletor-turno_aecio" value="valido" checked onChange="mudaVotoTurnoAecio(this)"> Votos válidos  |  <input type="radio" name="seletor-turno_aecio" value="total" onChange="mudaVotoTurnoAecio(this)"> Votos totais</span>
+          <br>
+          <br>
+          <div id="turno_aecio"></div>
+      <p>Os pontos preenchidos correspondem a pesquisas dos institutos Datafolha e Ibope. Passe o mouse em cima de cada ponto para saber qual é o instituto responsável por cada pesquisa.</p>
+      </div>
+    
 </div>
             
         <br>

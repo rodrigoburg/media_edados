@@ -1,6 +1,6 @@
 //onde está os dados
 path = "http://blog.estadaodados.com/projs/media_edados/"
-//path = ""
+path = ""
 //cria as tabs e deixa ativa a que for informada na url
 jQuery(function() {
   jQuery( "#tabs" ).tabs();
@@ -22,6 +22,8 @@ jQuery(function() {
       numero = 1
   else if (tab == "2marina") 
       numero = 2
+   else if (tab == "2aecio") 
+       numero = 3
 
   //desenha o primeiro gráfico
   desenha_pesquisas(tab)
@@ -51,6 +53,12 @@ jQuery(function() {
                 desenha_pesquisas("2marina")        
             location.hash = "#grafico=2marina";
         }
+        else if (grafico == "4") {
+            muda_turno_aecio("valido")
+            if (window.grafico_turno_aecio == null) 
+                desenha_pesquisas("2aecio")        
+            location.hash = "#grafico=2aecio";
+        }        
     }
   });
   
@@ -60,12 +68,15 @@ jQuery(function() {
 window.media = "valido"
 window.todos = "valido"
 window.turno = "valido"
+window.turno_aecio = "valido"
 window.grafico_media = null
 window.grafico_todos = null
 window.grafico_turno = null
+window.grafico_turno_aecio = null
 window.data_media = null
 window.data_todos = null
 window.data_turno = null
+window.data_turno_aecio = null
 
 width = jQuery(window).width()
 margin = Math.max(width/8,90)
@@ -83,6 +94,8 @@ function desenha_pesquisas(tab) {
         media_edados();
     else if (tab == "2marina")
         segundo_turno();
+    else if (tab == "2aecio")
+        segundo_turno_aecio();
 }
 
 function intencao_voto() {
@@ -301,6 +314,76 @@ function segundo_turno() {
      });
 }
 
+function segundo_turno_aecio() {
+    var svg = dimple.newSvg("#turno_aecio", width, 500);
+      d3.csv(path+"dados/segundo_turno_aecio.csv", function (data) {
+        window.data_turno_aecio = data
+        //filtra votos totais ou validos
+        var recorte = window.turno_aecio   
+        var myChart = new dimple.chart(svg, data);
+        myChart = arruma_tooltip(myChart,"todos")        
+
+        data = dimple.filterData(data,"voto",recorte)
+        var ibope_datafolha = dimple.filterData(data,"instituto",["Ibope","Datafolha"])
+        
+        myChart.setBounds(25, 30, width-margin, 405);
+        var x = myChart.addTimeAxis("x", "data","%Y-%m-%dT%H","%d/%m");
+        x.title = ""
+
+        var y = myChart.addMeasureAxis("y", "valor");
+        y.overrideMax = 60.0
+        
+        //primeira série, linha com datafolha e ibope apenas
+        var series = myChart.addSeries("candidato", dimple.plot.line);
+        series.data = ibope_datafolha
+        series.lineWeight = 1.8;
+        series.interpolation = "cardinal";
+                
+        //segunda série, só as bolhas. são duas séries apenas para eu pegar o valor do instituto na tooltip
+        var series2 = myChart.addSeries(["candidato","instituto"], dimple.plot.bubble)
+        series2.data = data
+
+        //faz uma série nova que será a linha cinza de 50%
+        var datas = dimple.getUniqueValues(data,"data")
+        var s3 = myChart.addSeries("metade", dimple.plot.line);
+        
+        var primeira_data = datas[0]
+        var ultima_data = datas[datas.length-1]
+
+        s3.data = [
+            { "metade" : "metade", "valor" : 50, "data" : primeira_data }, 
+            { "metade" : "metade", "valor" : 50, "data" :  ultima_data}];
+        
+        
+        myChart.assignColor("Dilma Rousseff","#CC0000");
+        myChart.assignColor("Aécio Neves","#1C4587");
+
+        //arruma ordem da legenda
+        var legenda = myChart.addLegend(25, 8, width, 20, "left");
+        legenda._getEntries = function () {
+           return arruma_legenda(myChart,"turno_aecio")
+        }
+        
+        myChart.draw();
+
+        //translada labels do eixo x
+        x.shapes.selectAll("text").attr("transform",
+            function (d) {
+              return d3.select(this).attr("transform") + " translate(0, 15) rotate(-60)";
+            });
+
+        //muda tamanho do texto
+        jQuery("#turno_aecio").find("text").css({"font-size":"12px"})
+        
+        window.grafico_turno_aecio = myChart
+
+        myChart = arruma_tooltip(myChart,"todos")
+        
+        //arruma a barra de 50%
+        arruma_50()
+     });
+}
+
 
 function arruma_50() {
     jQuery("circle[id*='metade']").remove()
@@ -376,51 +459,6 @@ function muda_todos(recorte) {
     }
 }
 
-function muda_turno(recorte) {
-    var myChart = window.grafico_turno
-    if (myChart != null) {
-        var data = window.data_turno
-        data = dimple.filterData(data,"voto",recorte)
-        var ibope_datafolha = dimple.filterData(data,"instituto",["Ibope","Datafolha"])
-
-        var legenda = myChart.legends
-        legenda_getEntries = function () {
-           return arruma_legenda(myChart,"turno")
-        }
-    
-        myChart.series[0].data = ibope_datafolha
-        myChart.series[1].data = data
-    
-        //arruma linha de 50% para começar lá no início
-        var datas = dimple.getUniqueValues(data,"data")
-        var primeira_data = datas[0]
-        var ultima_data = datas[datas.length-1]
-        
-        if (recorte == "valido") {
-            myChart.series[2].data = [
-                { "metade" : "metade", "valor" : 50, "data" : primeira_data }, 
-                { "metade" : "metade", "valor" : 50, "data" :  ultima_data}];
-        } else {
-            //soma a linha se for votos totais
-            myChart.series[2].data = [
-                { "metade" : "metade", "valor" : 0, "data" : primeira_data }, 
-                { "metade" : "metade", "valor" : 0, "data" :  primeira_data}];
-        }
-        myChart = arruma_tooltip(myChart,"todos")
-        myChart.draw(500)
-        //muda tamanho do texto
-        jQuery("#turno").find("text").css({"font-size":"12px"})
-
-    //    setTimeout(function () { bolinhas_preto();    }, 500);
-
-        window.grafico_turno = myChart
-    
-        arruma_50();
-    }
-}
-
-
-
 function muda_media(recorte) {
     var myChart = window.grafico_media
     if (myChart != null) {
@@ -465,6 +503,91 @@ function muda_media(recorte) {
     }
 }
 
+function muda_turno(recorte) {
+    var myChart = window.grafico_turno
+    if (myChart != null) {
+        var data = window.data_turno
+        data = dimple.filterData(data,"voto",recorte)
+        var ibope_datafolha = dimple.filterData(data,"instituto",["Ibope","Datafolha"])
+
+        var legenda = myChart.legends
+        legenda_getEntries = function () {
+           return arruma_legenda(myChart,"turno")
+        }
+    
+        myChart.series[0].data = ibope_datafolha
+        myChart.series[1].data = data
+    
+        //arruma linha de 50% para começar lá no início
+        var datas = dimple.getUniqueValues(data,"data")
+        var primeira_data = datas[0]
+        var ultima_data = datas[datas.length-1]
+        
+        if (recorte == "valido") {
+            myChart.series[2].data = [
+                { "metade" : "metade", "valor" : 50, "data" : primeira_data }, 
+                { "metade" : "metade", "valor" : 50, "data" :  ultima_data}];
+        } else {
+            //soma a linha se for votos totais
+            myChart.series[2].data = [
+                { "metade" : "metade", "valor" : 0, "data" : primeira_data }, 
+                { "metade" : "metade", "valor" : 0, "data" :  primeira_data}];
+        }
+        myChart = arruma_tooltip(myChart,"todos")
+        myChart.draw(500)
+        //muda tamanho do texto
+        jQuery("#turno").find("text").css({"font-size":"12px"})
+
+    //    setTimeout(function () { bolinhas_preto();    }, 500);
+
+        window.grafico_turno = myChart
+    
+        arruma_50();
+    }
+}
+
+function muda_turno_aecio(recorte) {
+    var myChart = window.grafico_turno_aecio
+    if (myChart != null) {
+        var data = window.data_turno_aecio
+        data = dimple.filterData(data,"voto",recorte)
+        var ibope_datafolha = dimple.filterData(data,"instituto",["Ibope","Datafolha"])
+
+        var legenda = myChart.legends
+        legenda_getEntries = function () {
+           return arruma_legenda(myChart,"turno_aecio")
+        }
+    
+        myChart.series[0].data = ibope_datafolha
+        myChart.series[1].data = data
+    
+        //arruma linha de 50% para começar lá no início
+        var datas = dimple.getUniqueValues(data,"data")
+        var primeira_data = datas[0]
+        var ultima_data = datas[datas.length-1]
+        
+        if (recorte == "valido") {
+            myChart.series[2].data = [
+                { "metade" : "metade", "valor" : 50, "data" : primeira_data }, 
+                { "metade" : "metade", "valor" : 50, "data" :  ultima_data}];
+        } else {
+            //soma a linha se for votos totais
+            myChart.series[2].data = [
+                { "metade" : "metade", "valor" : 0, "data" : primeira_data }, 
+                { "metade" : "metade", "valor" : 0, "data" :  primeira_data}];
+        }
+        myChart = arruma_tooltip(myChart,"todos")
+        myChart.draw(500)
+        //muda tamanho do texto
+        jQuery("#turno_aecio").find("text").css({"font-size":"12px"})
+
+    //    setTimeout(function () { bolinhas_preto();    }, 500);
+
+        window.grafico_turno_aecio = myChart
+    
+        arruma_50();
+    }
+}
 
 
 function arruma_tooltip(chart,qual_dos_dois) {
@@ -512,6 +635,8 @@ function arruma_legenda(grafico, recorte) {
         orderedValues = ["Dilma", "Aécio", "Marina", "Eduardo"];
     else if (recorte == "turno")
         orderedValues = ["Dilma", "Marina"];
+    else if (recorte == "turno_aecio")
+        orderedValues = ["Dilma", "Aécio"];
     else 
         orderedValues = ["Dilma", "Aécio", "Marina"];
 
@@ -552,6 +677,13 @@ function mudaVotoTurno(el) {
     jQuery(el).prop('checked',true);
     jQuery('input[name="seletor-turno"][value!="' + window.turno + '"]').prop('checked', false);
     muda_turno(window.turno)
+}
+
+function mudaVotoTurnoAecio(el) {
+    window.turno_aecio = el.value;
+    jQuery(el).prop('checked',true);
+    jQuery('input[name="seletor-turno_aecio"][value!="' + window.turno_aecio + '"]').prop('checked', false);
+    muda_turno_aecio(window.turno_aecio)
 }
 
 function getUrlVars() {
