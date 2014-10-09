@@ -6,7 +6,7 @@ jQuery(function() {
   jQuery( "#tabs" ).tabs();
 
   var variaveis = getUrlVars()
-      tab = "media" //valor default
+      tab = "2aecio" //valor default
 
   if ("grafico" in variaveis) {
       tab = variaveis["grafico"];
