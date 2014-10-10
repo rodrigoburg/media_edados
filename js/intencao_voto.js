@@ -1,6 +1,6 @@
 //onde está os dados
 path = "http://blog.estadaodados.com/projs/media_edados/"
-path = ""
+//path = ""
 //cria as tabs e deixa ativa a que for informada na url
 jQuery(function() {
   jQuery( "#tabs" ).tabs();
@@ -659,6 +659,7 @@ function arruma_tooltip(chart,qual_dos_dois) {
             if (qual_dos_dois == "todos") {
                 //acha o instituto se ele houver, usando a série do Dimple
                var instituto = e.key.split("/")[1].split("_")[0]
+               //checa se é 2o turno - e, se for, tira o 2 do final do nome do cabra
                var nome = e.aggField[0]
                if (nome.slice(-1) == "2") { nome = nome.substring(0, nome.length - 1);}
                 return [
