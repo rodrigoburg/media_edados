@@ -1,6 +1,6 @@
 //onde está os dados
 path = "http://blog.estadaodados.com/projs/media_edados/"
-//path = ""
+path = ""
 //cria as tabs e deixa ativa a que for informada na url
 jQuery(function() {
   jQuery( "#tabs" ).tabs();
@@ -219,6 +219,7 @@ function media_edados() {
 
         myChart.assignColor("Aécio Neves","#1C4587");
         myChart.assignColor("Dilma Rousseff","#CC0000");
+        
         myChart.assignColor("Eduardo Campos","#E69138");
         myChart.assignColor("Marina Silva","#E69138");
         myChart.assignColor("Outros","#2E2B2D");
@@ -382,6 +383,8 @@ function segundo_turno_aecio() {
 
         myChart.assignColor("Dilma Rousseff","#CC0000");
         myChart.assignColor("Aécio Neves","#1C4587");
+        myChart.assignColor("Aécio Neves2","#1C4587");
+        myChart.assignColor("Dilma Rousseff2","#CC0000");
 
         //arruma ordem da legenda
         var legenda = myChart.addLegend(25, 8, width, 20, "left");
@@ -413,6 +416,7 @@ function segundo_turno_aecio() {
 function arruma_50() {
     //jQuery("circle[id*='metade']").remove()
     jQuery("circle[id*='segturno']").remove()
+    jQuery("circle[id*='metade']").remove()
 
     jQuery("path[id*='metade']")
         .css({
@@ -655,9 +659,10 @@ function arruma_tooltip(chart,qual_dos_dois) {
             if (qual_dos_dois == "todos") {
                 //acha o instituto se ele houver, usando a série do Dimple
                var instituto = e.key.split("/")[1].split("_")[0]
-
+               var nome = e.aggField[0]
+               if (nome.slice(-1) == "2") { nome = nome.substring(0, nome.length - 1);}
                 return [
-                e.aggField[0]+": "+e.cy,
+                nome+": "+e.cy,
                 "Data: "+day+"/"+month,
                 "Instituto: "+instituto
                 ];

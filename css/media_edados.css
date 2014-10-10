@@ -129,15 +129,33 @@ width: 1250.1875px;
     fill:#CC0000;
     stroke:#CC0000;
 }
+
+turno_aecio .dimple-bubble.dimple-dilma-rousseff2.dimple-ibope, #turno_aecio .dimple-bubble.dimple-dilma-rousseff2.dimple-datafolha {
+    fill:#CC0000;
+    stroke:#CC0000;
+}
 #turno_aecio .dimple-bubble.dimple-dilma-rousseff {
     fill:#FFF;
     stroke:#CC0000;
 }
+#turno_aecio .dimple-bubble.dimple-dilma-rousseff2 {
+    fill:#FFF;
+    stroke:#CC0000;
+}
+
 #turno_aecio .dimple-bubble.dimple-a-cio-neves.dimple-ibope, #turno_aecio .dimple-bubble.dimple-a-cio-neves.dimple-datafolha {
     fill:#1C4587;
     stroke:#1C4587;
 }
 #turno_aecio .dimple-bubble.dimple-a-cio-neves {
+    fill:#FFF;
+    stroke:#1C4587;                
+}
+#turno_aecio .dimple-bubble.dimple-a-cio-neves2.dimple-ibope, #turno_aecio .dimple-bubble.dimple-a-cio-neves2.dimple-datafolha {
+    fill:#1C4587;
+    stroke:#1C4587;
+}
+#turno_aecio .dimple-bubble.dimple-a-cio-neves2 {
     fill:#FFF;
     stroke:#1C4587;                
 }
